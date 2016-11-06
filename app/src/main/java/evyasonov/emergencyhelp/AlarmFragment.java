@@ -260,7 +260,8 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
             super.onProgressUpdate(values);
 
             mLayout.setBackgroundColor(isRed ? Color.BLUE : Color.RED);
-            mTimeLeftView.setText(((int) (mWaitingTime - (System.currentTimeMillis() - mStartTime)) / 1000) + "");
+            String toText = ((int) (mWaitingTime - (System.currentTimeMillis() - mStartTime)) / 1000) + "";
+            mTimeLeftView.setText(toText);
         }
     }
 

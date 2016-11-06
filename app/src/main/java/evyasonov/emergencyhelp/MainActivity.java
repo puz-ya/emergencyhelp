@@ -2,6 +2,7 @@ package evyasonov.emergencyhelp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -11,6 +12,7 @@ import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
@@ -22,7 +24,7 @@ import java.util.Arrays;
 import java.util.TreeSet;
 
 
-public class MainActivity extends Activity implements CompoundButton.OnCheckedChangeListener {
+public class MainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
     public static final String SETTINGS_TAB = "evyasonov.emergencyhelp.SETTINGS_TAB";
 
@@ -76,6 +78,8 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
 
         if (mSharedPreferences.getStringSet("emergency_contacts", new TreeSet<String>()).isEmpty()) {
 
+            Log.d(LOG_TAG, "contactsAreEmpty");
+
             final Activity thisActivity = this;
 
             new AlertDialog.Builder(this)
@@ -107,12 +111,24 @@ public class MainActivity extends Activity implements CompoundButton.OnCheckedCh
 
             mStatusSwitch.setChecked(false);
         } else {
-            startService(new Intent("evyasonov.emergencyhelp.AccelerometerMonitoringService"));
+            //always store returned value ! debug, debug AND debug
+            //Implicit intents with startService are not safe: Intent ...
+            //Intent intent = new Intent("evyasonov.emergencyhelp.AccelerometerMonitoringService");
 
-            final LocationManager mLocationManager =
-                    (LocationManager) getSystemService(LOCATION_SERVICE);
+            Intent intent = new Intent(this, AccelerometerMonitoringService.class);
+            //intent.addCategory("evyasonov.emergencyhelp.AccelerometerMonitoringService");
+            ComponentName componentName = startService(intent);
 
-            if (!mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            //intent.setPackage("evyasonov.emergencyhelp");
+            //bindService(intent, serviceConnection, Service.BIND_AUTO_CREATE);
+            //ComponentName componentName = startService(intent);
+
+            Log.d(LOG_TAG, "startService");
+
+            final LocationManager locationManager =
+                    (LocationManager) this.getSystemService(LOCATION_SERVICE);
+
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
                 new AlertDialog.Builder(this)
                         .setMessage(getString(R.string.gps_off_dialog_description))
                         .setPositiveButton(

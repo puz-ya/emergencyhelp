@@ -7,7 +7,6 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -44,7 +43,8 @@ public class AccelerometerMonitoringService extends Service {
     static final int MSG_PREFERENCES_WAS_CHANGED = 4;
     static final int MSG_SMS_WAS_SEND = 5;
 
-    private static final String LOG_TAG = "evyasonov/service";
+    private static final String LOG_TAG = "e.y/Accel...Service";
+    private static final String TAG = "HelloService";
 
     /**
      * How many events from sensor will be kept for determining alarm.
@@ -77,8 +77,11 @@ public class AccelerometerMonitoringService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
-        Log.d(LOG_TAG, "onCreate");
 
+        //ENABLE DEBUG in SERVICE FUUUUUUUUUCK
+        //android.os.Debug.waitForDebugger();  // this line is key
+
+        Log.d(LOG_TAG, "onCreate");
         readUserPreferences();
 
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -92,7 +95,20 @@ public class AccelerometerMonitoringService extends Service {
         applyNormalMode();
 
         setServiceIsRunningNotification();
+        //*/
     }
+
+    /*
+    public int onStartCommand(Intent intent, int flags, int startId){
+        //ENABLE DEBUG in SERVICE FUUUUUUUUUCK
+        android.os.Debug.waitForDebugger();  // this line is key
+
+        Log.d(TAG, "onStartCommand");
+
+        //Sticky – A sticky service will be restarted, and a null intent will be delivered to OnStartCommand at restart.
+        // Used when the service is continuously performing a long-running operation, such as updating a stock feed.
+        return START_STICKY;
+    } //*/
 
     /**
      * When binding to the service, we return an interface to our messenger
@@ -101,6 +117,7 @@ public class AccelerometerMonitoringService extends Service {
     @Override
     public IBinder onBind(final Intent intent) {
         return mMessenger.getBinder();
+        //return null;
     }
 
     @Override
@@ -110,27 +127,33 @@ public class AccelerometerMonitoringService extends Service {
         mLocationManager.removeUpdates(mLocationListener);
         mSensorManager.unregisterListener(mAccelerometerListener, mSensor);
 
-        //GPS ? освободить ?
+        //TODO: GPS ? освободить ?
 
         stopForeground(true);
 
         mWakeLock.release();
 
         super.onDestroy();
+        //*/
     }
 
 
     private void applyNormalMode() {
+        //ENABLE DEBUG in SERVICE FUUUUUUUUUCK
+        //android.os.Debug.waitForDebugger();  // this line is key
+
         Log.d(LOG_TAG, "applyNormalMode");
 
         mSensorManager.unregisterListener(mAccelerometerListener, mSensor);
         final boolean batchMode =
                 mSensorManager.registerListener(mAccelerometerListener, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
-        if(!batchMode){
+        /*if(!batchMode){
             //cannot register listener -> exit
             //TODO: send a message that we are f***ed
             Log.d(LOG_TAG, "f***ed");
+            return;
         }
+        //*/
 
         mLocationManager.removeUpdates(mLocationListener);
         mLocationManager.requestLocationUpdates(
@@ -141,6 +164,7 @@ public class AccelerometerMonitoringService extends Service {
 
 
         mLocationOnAlarmMoment = null;
+        //*/
     }
 
     private void startAlarm() {
@@ -286,7 +310,7 @@ public class AccelerometerMonitoringService extends Service {
 
         @Override
         public void onAccuracyChanged(final Sensor sensor, final int accuracy) {
-
+            //TODO: onAccuracyChanged() empty
         }
 
         //TODO: never used concatValues()
@@ -304,7 +328,7 @@ public class AccelerometerMonitoringService extends Service {
     /**
      * Target we publish for clients to send messages to IncomingHandler.
      */
-    private final Messenger mMessenger = new Messenger(new Handler() {
+    private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(final Message msg) {
             Log.d(LOG_TAG, "handleMessage");
@@ -333,7 +357,8 @@ public class AccelerometerMonitoringService extends Service {
                     super.handleMessage(msg);
             }
         }
-    });
+    };
+    private final Messenger mMessenger = new Messenger(mHandler);
 
     private class MyLocationListener implements LocationListener {
         private static final int SIGNIFICANT_TIME_IN_MILLIS = 1000 * 60 * 2;
@@ -372,6 +397,9 @@ public class AccelerometerMonitoringService extends Service {
         }
 
         private boolean isThisLocationBetter(final Location newLocation) {
+
+            Log.d(LOG_TAG, "isLocationBetter");
+
             if (newLocation == null) {
                 return true;
             }
@@ -411,6 +439,7 @@ public class AccelerometerMonitoringService extends Service {
 
         /** Checks whether two providers are the same */
         private boolean isSameProvider(final String provider1, final String provider2) {
+            Log.d(LOG_TAG, "isSameProvider");
             if (provider1 == null) {
                 return provider2 == null;
             }
@@ -420,14 +449,17 @@ public class AccelerometerMonitoringService extends Service {
 
 
     public static boolean isServiceRunning(Context context) {
+        Log.d(LOG_TAG, "isServiceRunning");
         final Class<?> serviceClass = AccelerometerMonitoringService.class;
 
         final ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         for (final ActivityManager.RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE)) {
             if (serviceClass.getName().equals(service.service.getClassName())) {
+                Log.d(LOG_TAG, "isServiceRunningTRUE");
                 return true;
             }
         }
+        Log.d(LOG_TAG, "isServiceRunningFALSE");
         return false;
     }
 
