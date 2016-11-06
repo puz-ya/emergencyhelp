@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >
+
+    <AutoCompleteTextView xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/new_phone_number"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/settings_new_phone_number_hint"/>
+
+    <!--<Button-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:id="@+id/add_phone_button"-->
+        <!--android:text="@string/settings_add_button_text"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_margin="5dp"-->
+        <!--/>-->
+
+    <ImageView
+        android:id="@+id/add_phone_button"
+        android:padding="5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:layout_alignTop="@+id/new_phone_number"
+        android:layout_alignBottom="@+id/new_phone_number"
+        android:layout_alignRight="@+id/new_phone_number"
+        android:src="@drawable/ic_add_participant" />
+
+</RelativeLayout>

@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Emergency Caller</string>
+
+    <!-- SMS MESSAGE -->
+    <string name="message_template">
+        Скорее всего мне нужна помощь. Мой телефон зарегистрировал сильный удар. Возможно это автомобильная авария.
+        $name_sentence $addition_info_sentence $location_sentence
+        Это автоматическое сообщение ($time).</string>
+    <string name="name_sentence">Имя: $name.</string>
+    <string name="addition_info_sentence">Доп. информация: $addition_info.</string>
+    <string name="location_sentence">Координаты ($minutes_pass мин. назад): широта=$latitude, долгота=$longitude $accuracy_sentence.</string>
+    <string name="accuracy_sentence">(точность $accuracy м.)</string>
+
+
+    <!-- SERVICE NOTIFICATION -->
+    <string name="notification_title">Emergency Caller</string>
+    <string name="notification_gps_off">GPS выключен</string>
+    <string name="notification_gps_on">GPS включен</string>
+    <string name="notification_description">Monitoring is ON, $GPS.</string>
+    <string name="notification_sms_was_sent">Emergency SMSs was sent, monitoring was stopped</string>
+    <string name="notification_sms_was_sent_numbers">Numbers: </string>
+
+
+
+    <!-- ALARM ACTIVITY -->
+    <string name="alarm_activity_label">ТРЕВОГА - Emergency Caller</string>
+    <string name="alarm_screen_messages_sent">Сообщения были посланы</string>
+    <string name="alarm_screen_button_while_alarm">ОСТАНОВИТЬ ТРЕВОГУ</string>
+    <string name="alarm_screen_button_after_alarm">ОК</string>
+    <string name="alarm_screen_description">Слежение ВЫКЛ. Сообщения были посланы.</string>
+
+
+    <!-- MAIN ACTIVITY -->
+    <string name="main_activity_label">Emergency Caller</string>
+    <string name="main_activity_status">Status:</string>
+    <string name="main_activity_description">
+    При сильном ударе Emergency Caller автоматически отправит смс с вашим местоположением и информацией о вас вашим родственикам и службе спасения.
+У вас будет 60 секунд для того, что бы отменить отправку.
+
+Данное приложение предоставляется \'как есть\' без каких-либо гарантий</string>
+
+    <!-- MAIN ACTIVITY MENU -->
+    <string name="menu_deep_settings">Настройки</string>
+    <string name="menu_view_sms">Увидеть SMS</string>
+    <string name="menu_licence">Условия использования</string>
+    <string name="menu_about">О приложении</string>
+
+    <!-- GPS IS OFF DIALOG -->
+    <string name="gps_off_dialog_description">
+        Включите GPS для возможности определения местоположения.</string>
+    <string name="gps_off_dialog_positive_button">ОК</string>
+    <string name="gps_off_dialog_negative_button">Проигнорировать</string>
+
+    <!-- OPEN SETTINGS ON FIRST LAUNCH DIALOG  -->
+    <string name="first_launch_open_settings_dialog_description">
+        Укажите номера и другую информацию для отправки экстренных SMS-сообщений.
+    </string>
+    <string name="first_launch_open_settings_positive_button">В настройки</string>
+    <string name="first_launch_open_settings_negative_button">Проигнорировать</string>
+
+    <!-- SIM IS NOT AVAILABLE -->
+    <string name="sim_is_not_available_description">SIM-карта недоступна.</string>
+    <string name="sim_is_not_available_positive_button">Выход</string>
+
+    <!-- ABOUT DIALOG -->
+    <string name="about_text">Версия: 1.0</string>
+    <string name="about_positive_button">ОК</string>
+
+    <!-- LICENCE DIALOG -->
+    <string name="licence_accept_button">Принять</string>
+    <string name="licence_decline_button">Отклонить</string>
+    <string name="license_positive_button">ОК</string>
+
+    <!-- SMS DIALOG -->
+    <string name="sms_pretext">Такое СМС будет отправлено:\n</string>
+    <string name="sms_positive_button">OK</string>
+
+
+    <!-- NO NUMBERS IN SETTINGS DIALOG -->
+    <string name="no_numbers_in_settings">Сервис не был запущен. Добавьте хотя бы 1 номер для смс.</string>
+    <string name="no_numbers_in_settings_positive_button">В настройки</string>
+    <string name="no_numbers_in_settings_negative_button">Отмена</string>
+
+
+    <!-- SETTINGS ACTIVITY -->
+    <string name="settings_activity_label">Настройки - Emergency Caller</string>
+    <string name="settings_tab_1_text">ОБО МНЕ</string>
+    <string name="settings_tab_2_text">ТЕЛЕФОНЫ</string>
+    <string name="settings_tab_3_text">ДРУГОЕ</string>
+
+    <string name="settings_invalid_number">Неверный формат номера</string>
+    <string name="settings_repeating_number">Этот номер уже добавлен</string>
+
+    <string name="settings_confirm_deleting_number_text">Удалить?</string>
+    <string name="settings_confirm_deleting_number_positive_button">Удалить</string>
+    <string name="settings_confirm_deleting_number_negative_button">Не удалять</string>
+
+    <string name="settings_new_phone_number_hint">Номер телефона или имя из контактов</string>
+    <string name="settings_add_button_text">Добавить</string>
+
+    <string name="settings_bootload">Запускать при загрузке телефона</string>
+    <string name="settings_alarm_time">Alarm time</string>
+    <string name="settings_sensor_sensitivity">Sensor sensitivity</string>
+    <string name="settings_user_name">Имя</string>
+    <string name="settings_user_comment">Дополнительная информация</string>
+
+
+    <!-- EMERGENCY NUMBERS -->
+    <string name="emergency_number_default">Emergency\n112</string>
+    <string-array name="emergency_numbers">
+        <item>Emergency\n112</item>
+    </string-array>
+
+
+    <!-- DIALOGS -->
+    <string name="dialog_one_button_positive_button">ОК</string>
+
+    <string name="device_has_no_accelerometer">Акселерометр на этом устройстве недоступен :(</string>
+    <string name="device_has_no_accelerometer_exit">Выход</string>
+
+</resources>

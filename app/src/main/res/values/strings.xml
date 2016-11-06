@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Emergency Caller</string>
+
+    <!-- SMS MESSAGE -->
+    <string name="message_template">
+        Heavy hit registered. It may be a car accident, and I need help.
+        $name_sentence $addition_info_sentence $location_sentence
+        This is an automatic message.</string>
+    <string name="name_sentence">Name: $name.</string>
+    <string name="addition_info_sentence">Info: $addition_info.</string>
+    <string name="location_sentence">Coordinates ($minutes_pass min. ago): latitude=$latitude, longitude=$longitude, $accuracy_sentence time=$time (UTC).</string>
+    <string name="accuracy_sentence">(accuracy $accuracy m.)</string>
+
+
+    <!-- SERVICE NOTIFICATION -->
+    <string name="notification_title">Emergency Caller</string>
+    <string name="notification_gps_off">GPS is OFF</string>
+    <string name="notification_gps_on">GPS is ON</string>
+    <string name="notification_description">Monitoring is ON, $GPS.</string>
+    <string name="notification_sms_was_sent">Emergency SMSs was sent, monitoring was stopped</string>
+    <string name="notification_sms_was_sent_numbers">Numbers: </string>
+
+
+
+    <!-- ALARM ACTIVITY -->
+    <string name="alarm_activity_label">ALARM - Emergency Caller</string>
+    <string name="alarm_screen_messages_sent">Messages has been sent</string>
+    <string name="alarm_screen_button_while_alarm">STOP ALARM</string>
+    <string name="alarm_screen_button_after_alarm">OK</string>
+    <string name="alarm_screen_description">Monitoring is OFF. Messages has been sent.</string>
+
+
+    <!-- MAIN ACTIVITY -->
+    <string name="main_activity_label">Emergency Caller</string>
+    <string name="main_activity_status">Status:</string>
+    <string name="main_activity_description">
+    In case of heavy hit this app sends a text message to emergency service. You\'ll have some time to cancel sending.\n
+        The app provided on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+    </string>
+
+    <!-- MAIN ACTIVITY MENU -->
+    <string name="menu_deep_settings">Settings</string>
+    <string name="menu_view_sms">View SMS</string>
+    <string name="menu_licence">License</string>
+    <string name="menu_about">About</string>
+
+    <!-- GPS IS OFF DIALOG -->
+    <string name="gps_off_dialog_description">
+        Enable GPS to find current location.
+        Click OK to go to location services settings to let you do so.</string>
+    <string name="gps_off_dialog_positive_button">OK</string>
+    <string name="gps_off_dialog_negative_button">Cancel</string>
+
+    <!-- OPEN SETTINGS ON FIRST LAUNCH DIALOG  -->
+    <string name="first_launch_open_settings_dialog_description">
+        Please specify phone numbers and other info for text message in case of emergency.
+    </string>
+    <string name="first_launch_open_settings_positive_button">Open Settings</string>
+    <string name="first_launch_open_settings_negative_button">Ignore</string>
+
+    <!-- SIM IS NOT AVAILABLE -->
+    <string name="sim_is_not_available_description">SIM card is not available.</string>
+    <string name="sim_is_not_available_positive_button">Exit</string>
+
+    <!-- ABOUT DIALOG -->
+    <string name="about_text">Version: 1.0</string>
+    <string name="about_positive_button">OK</string>
+
+    <!-- LICENCE DIALOG -->
+    <string name="licence_accept_button">Accept</string>
+    <string name="licence_decline_button">Decline</string>
+    <string name="license_positive_button">OK</string>
+
+    <!-- SMS DIALOG -->
+    <string name="sms_pretext">SMS like this will be sent:\n</string>
+    <string name="sms_positive_button">OK</string>
+
+    <!-- NO NUMBERS IN SETTINGS DIALOG -->
+    <string name="no_numbers_in_settings"> Monitoring wasn\'t started. Specify 1 or more phone numbers as SMS receiver.</string>
+    <string name="no_numbers_in_settings_positive_button">Settings</string>
+    <string name="no_numbers_in_settings_negative_button">Cancel</string>
+
+
+    <!-- SETTINGS ACTIVITY -->
+    <string name="settings_activity_label">Settings - Emergency Caller</string>
+    <string name="settings_tab_1_text">MY INFO</string>
+    <string name="settings_tab_2_text">PHONES</string>
+    <string name="settings_tab_3_text">OTHER</string>
+
+    <string name="settings_invalid_number">Number isn\'t valid</string>
+    <string name="settings_repeating_number">This number already added</string>
+
+    <string name="settings_confirm_deleting_number_text">Delete?</string>
+    <string name="settings_confirm_deleting_number_positive_button">Delete</string>
+    <string name="settings_confirm_deleting_number_negative_button">Cancel</string>
+
+    <string name="settings_new_phone_number_hint">Phone number or contact</string>
+    <string name="settings_add_button_text">Add</string>
+
+    <string name="settings_bootload">Start on booting</string>
+    <string name="settings_alarm_time">Alarm time</string>
+    <string name="settings_sensor_sensitivity">Sensor sensitivity</string>
+    <string name="settings_user_name">Name</string>
+    <string name="settings_user_comment">Addition info</string>
+
+
+    <!-- EMERGENCY NUMBERS -->
+    <string name="emergency_number_default">Emergency\n112</string>
+    <string-array name="emergency_numbers">
+        <item>Emergency\n112</item>
+    </string-array>
+
+
+    <!-- DIALOGS -->
+    <string name="dialog_one_button_positive_button">OK</string>
+
+    <string name="device_has_no_accelerometer">Device has no accelerometer :(</string>
+    <string name="device_has_no_accelerometer_exit">Exit</string>
+
+</resources>
