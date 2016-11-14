@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
     public static final String SETTINGS_TAB = "evyasonov.emergencyhelp.SETTINGS_TAB";
 
-    private static final String LOG_TAG = "evyasonov/MainActivity";
+    private static final String LOG_TAG = "e.y/MainActivity";
 
 
     private Switch mStatusSwitch;
@@ -62,23 +62,29 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     }
 
     @Override
+    public void onDestroy(){
+        Log.d(LOG_TAG, "onDestroy");
+        super.onDestroy();
+    }
+
+    @Override
     public void onCheckedChanged(final CompoundButton compoundButton, final boolean isChecked) {
         Log.d(LOG_TAG, "onCheckedChanged");
 
         if (isChecked) {
-            alarmOn();
+            setAccelServiceOn();
         } else {
-            alarmOff();
+            setAccelServiceOff();
         }
     }
 
 
-    private void alarmOn() {
-        Log.d(LOG_TAG, "alarmOn");
+    private void setAccelServiceOn() {
+        Log.d(LOG_TAG, "setAccelServiceOn");
 
         if (mSharedPreferences.getStringSet("emergency_contacts", new TreeSet<String>()).isEmpty()) {
 
-            Log.d(LOG_TAG, "contactsAreEmpty");
+            Log.d(LOG_TAG, "emergencyContactsAreEmpty");
 
             final Activity thisActivity = this;
 
@@ -111,6 +117,9 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
             mStatusSwitch.setChecked(false);
         } else {
+
+            Log.d(LOG_TAG, "emergencyContactsNOTEmpty");
+
             //always store returned value ! debug, debug AND debug
             //Implicit intents with startService are not safe: Intent ...
             //Intent intent = new Intent("evyasonov.emergencyhelp.AccelerometerMonitoringService");
@@ -156,8 +165,8 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         }
     }
 
-    private void alarmOff() {
-        Log.d(LOG_TAG, "alarmOff");
+    private void setAccelServiceOff() {
+        Log.d(LOG_TAG, "setAccelServiceOff");
 
         stopService(new Intent("evyasonov.emergencyhelp.AccelerometerMonitoringService"));
     }
@@ -205,6 +214,11 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                         getString(R.string.about_text),
                         getString(R.string.about_positive_button)
                 );
+                break;
+
+            case R.id.action_menu_close:
+                setAccelServiceOff();
+                finish();
                 break;
 
             default:

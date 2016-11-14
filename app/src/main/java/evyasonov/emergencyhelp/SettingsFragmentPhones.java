@@ -43,7 +43,7 @@ public class SettingsFragmentPhones
      */
     private LinkedList<String> mEmergencyContacts;
     private ArrayAdapter<String> mEmergencyContactsAdapter;
-    private final Set<String> mEmergencyPhoneNumbers = new TreeSet<String>();
+    private final Set<String> mEmergencyPhoneNumbers = new TreeSet<>();
 
     private View mFragmentView;
     private AutoCompleteTextView mAddPhoneTextView;

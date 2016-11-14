@@ -14,6 +14,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
@@ -25,6 +26,7 @@ import android.support.v4.app.NotificationCompat;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -43,7 +45,9 @@ public class AccelerometerMonitoringService extends Service {
     static final int MSG_PREFERENCES_WAS_CHANGED = 4;
     static final int MSG_SMS_WAS_SEND = 5;
 
-    private static final String LOG_TAG = "e.y/Accel...Service";
+    static final int FOREGROUND_ID = 2020;
+
+    private static final String LOG_TAG = "e.y/Acceler...Service";
     private static final String TAG = "HelloService";
 
     /**
@@ -74,15 +78,11 @@ public class AccelerometerMonitoringService extends Service {
     private Location mLocationOnAlarmMoment;
 
 
+
     @Override
     public void onCreate() {
         super.onCreate();
-
-        //ENABLE DEBUG in SERVICE FUUUUUUUUUCK
-        //android.os.Debug.waitForDebugger();  // this line is key
-
         Log.d(LOG_TAG, "onCreate");
-        readUserPreferences();
 
         mLocationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         mSensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -92,22 +92,29 @@ public class AccelerometerMonitoringService extends Service {
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_NAME);
         mWakeLock.acquire();
 
-        applyNormalMode();
-
-        setServiceIsRunningNotification();
         //*/
-    }
+    } //*/
 
-    /*
+
     public int onStartCommand(Intent intent, int flags, int startId){
         //ENABLE DEBUG in SERVICE FUUUUUUUUUCK
-        android.os.Debug.waitForDebugger();  // this line is key
+        //android.os.Debug.waitForDebugger();  // this line is key
+        Log.d(LOG_TAG, "onStartCommand");
+        //Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
 
-        Log.d(TAG, "onStartCommand");
+        readUserPreferences();
+
+        Log.d(LOG_TAG, "onStartCommand_applyNormalMode");
+        applyNormalMode();
+
+        Log.d(LOG_TAG, "onStartCommand_setServiceIsRunningNotification");
+        setServiceIsRunningNotification();
 
         //Sticky – A sticky service will be restarted, and a null intent will be delivered to OnStartCommand at restart.
         // Used when the service is continuously performing a long-running operation, such as updating a stock feed.
+        Log.d(LOG_TAG, "onStartCommand_return");
         return START_STICKY;
+        //return START_REDELIVER_INTENT;    //the last intent that was delivered to OnStartCommand before the service was stopped
     } //*/
 
     /**
@@ -116,19 +123,51 @@ public class AccelerometerMonitoringService extends Service {
      */
     @Override
     public IBinder onBind(final Intent intent) {
+        Log.d(LOG_TAG, "onBind");
         return mMessenger.getBinder();
         //return null;
     }
 
     @Override
+    public boolean onUnbind(Intent intent) {
+        // All clients have unbound with unbindService()
+        //Toast.makeText(this, "onUnbind", Toast.LENGTH_LONG).show();
+        Log.d(LOG_TAG, "onUnbind");
+        return false;    // true -> indicates whether onRebind should be used
+    }
+    @Override
+    public void onRebind(Intent intent) {
+        Log.d(LOG_TAG, "onRebind");
+        //Toast.makeText(this, "onRebind", Toast.LENGTH_LONG).show();
+        // A client is binding to the service with bindService(),
+        // after onUnbind() has already been called
+    }
+
+    //When we remove app from application list, onTaskRemoved calls for service
+    @Override
+    public void onTaskRemoved(Intent rootIntent){
+        //Toast.makeText(getApplicationContext(), "<< onTaskRemoved called >>", Toast.LENGTH_LONG).show();
+        Log.d(LOG_TAG, "onTaskRemoved");
+
+        // start blank activity to prevent kill
+        // @see https://code.google.com/p/android/issues/detail?id=53313
+        Intent intent = new Intent(this, MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        super.onTaskRemoved(rootIntent);
+    }
+
+    @Override
     public void onDestroy() {
-        Log.d(LOG_TAG, "onDestroy");
+        Log.d(LOG_TAG, "onDestroyAccelService");
 
         mLocationManager.removeUpdates(mLocationListener);
         mSensorManager.unregisterListener(mAccelerometerListener, mSensor);
 
         //TODO: GPS ? освободить ?
 
+        //android.os.Debug.waitForDebugger();  // this line is key
+        //Toast.makeText(getApplicationContext(), "STOP FOREGROUND", Toast.LENGTH_LONG).show();
         stopForeground(true);
 
         mWakeLock.release();
@@ -172,8 +211,17 @@ public class AccelerometerMonitoringService extends Service {
 
         mSensorManager.unregisterListener(mAccelerometerListener, mSensor);
 
-        mLocationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, mLocationListener);
-        mLocationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, mLocationListener);
+        //first - checking Network (wifi), usually disabled
+        String provider = LocationManager.NETWORK_PROVIDER;
+        if (mLocationManager.isProviderEnabled(provider)) {
+            mLocationManager.requestLocationUpdates(provider, 0, 0, mLocationListener);
+        }
+
+        //second - checking GPS, usually auto-enabled
+        provider = LocationManager.GPS_PROVIDER;
+        if (mLocationManager.isProviderEnabled(provider)) {
+            mLocationManager.requestLocationUpdates(provider, 0, 0, mLocationListener);
+        }
 
         mLocationOnAlarmMoment = mLocationListener.getLastLocation();
 
@@ -207,7 +255,7 @@ public class AccelerometerMonitoringService extends Service {
                         .setAutoCancel(true)
                         .setContentIntent(
                                 PendingIntent.getActivity(
-                                        this, 0, new Intent(this, MainActivity.class), 0));
+                                        this, 1, new Intent(this, MainActivity.class), 0));
 
         final NotificationManager mNotificationManager =
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -259,12 +307,20 @@ public class AccelerometerMonitoringService extends Service {
                             getString(R.string.notification_description).replace("$GPS", gpsText)
                         );
 
+        Log.d(LOG_TAG, "notificationIntent");
+
+        Intent notificationIntent = new Intent(this, MainActivity.class);
+        //Hack to not close Service from app list
+        if(Build.VERSION.SDK_INT >= 16){     //The flag we used here was only added at API 16
+            notificationIntent.setFlags(Intent.FLAG_RECEIVER_FOREGROUND);
+        }
         final PendingIntent notificationClickIntent =
-                PendingIntent.getActivity(this, 0, new Intent(this, MainActivity.class), 0);
+                PendingIntent.getActivity(this, 1, notificationIntent, 0);
         builder.setContentIntent(notificationClickIntent);
 
         //todo: ??
-        startForeground(1, builder.build());
+        Log.d(LOG_TAG, "startForeground");
+        startForeground(FOREGROUND_ID, builder.build());
     }
 
 
@@ -345,7 +401,7 @@ public class AccelerometerMonitoringService extends Service {
                     } catch (RemoteException e) {
                         e.printStackTrace();
                     }
-                    stopSelf();
+                    stopSelf();     //stop service after sms sent
                     System.exit(0);
                     break;
 
@@ -361,7 +417,7 @@ public class AccelerometerMonitoringService extends Service {
     private final Messenger mMessenger = new Messenger(mHandler);
 
     private class MyLocationListener implements LocationListener {
-        private static final int SIGNIFICANT_TIME_IN_MILLIS = 1000 * 60 * 2;
+        private static final int SIGNIFICANT_TIME_IN_MILLIS = 1000 * 60 * 2;    //2 minutes
         private static final int SIGNIFICANT_ACCURACY_IN_METERS = 10;
 
         private Location mBestLocation = null;
@@ -403,6 +459,14 @@ public class AccelerometerMonitoringService extends Service {
             if (newLocation == null) {
                 return true;
             }
+            if(mBestLocation == null){
+                mBestLocation = new Location("test_provider");//provider name is unecessary
+                mBestLocation.setLatitude(0.0d);//coords of course
+                mBestLocation.setLongitude(0.0d);
+                mBestLocation.setTime(1479156000);  //2016-11-14T20:40:00
+                mBestLocation.setAccuracy(SIGNIFICANT_ACCURACY_IN_METERS);
+            }
+
 
             // Check whether the new location fix is newer or older
             final long timeDelta = newLocation.getTime() - mBestLocation.getTime();

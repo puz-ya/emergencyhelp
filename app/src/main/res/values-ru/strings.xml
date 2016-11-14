@@ -46,6 +46,7 @@
     <string name="menu_view_sms">Увидеть SMS</string>
     <string name="menu_licence">Условия использования</string>
     <string name="menu_about">О приложении</string>
+    <string name="menu_close_all">Закрыть</string>
 
     <!-- GPS IS OFF DIALOG -->
     <string name="gps_off_dialog_description">

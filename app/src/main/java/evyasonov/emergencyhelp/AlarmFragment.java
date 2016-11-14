@@ -269,16 +269,18 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
     private Handler mMessageHandler = new Handler() {
         @Override
         public void handleMessage(final Message msg) {
-//            TODO: get numbers from msg and show the message
-//            switch (msg.what) {
-//                case AccelerometerMonitoringService.MSG_SMS_WAS_SEND:
-//                    break;
-//                case AccelerometerMonitoringService.MSG_SAY_HELLO:
-//                    Log.d(LOG_TAG, "Hello!");
-//                    break;
-//                default:
-//                    super.handleMessage(msg);
-//            }
+            //TODO: get numbers from msg and show the message
+            /*
+            switch (msg.what) {
+                case AccelerometerMonitoringService.MSG_SMS_WAS_SEND:
+                    break;
+                case AccelerometerMonitoringService.MSG_SAY_HELLO:
+                    Log.d(LOG_TAG, "Hello!");
+                    break;
+                default:
+                    super.handleMessage(msg);
+            }
+            */
         }
     };
 }
