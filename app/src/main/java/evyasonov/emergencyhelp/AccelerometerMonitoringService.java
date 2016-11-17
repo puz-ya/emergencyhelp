@@ -7,6 +7,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -14,6 +15,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +25,8 @@ import android.os.Messenger;
 import android.os.PowerManager;
 import android.os.RemoteException;
 import android.support.v4.app.NotificationCompat;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.telephony.PhoneNumberUtils;
 import android.telephony.SmsManager;
 import android.util.Log;
@@ -38,7 +42,10 @@ import java.util.TreeSet;
 // TODO: monitor sim states
 // TODO: try to send one more sms in 1 minute if location are not defined
 
-public class AccelerometerMonitoringService extends Service {
+public class AccelerometerMonitoringService
+        extends Service
+        implements Loader.OnLoadCompleteListener<Cursor>
+{
 
     static final int MSG_ALARM_CANCELLED = 2;
     static final int MSG_ALARM_NOT_CANCELLED = 3;
@@ -48,7 +55,6 @@ public class AccelerometerMonitoringService extends Service {
     static final int FOREGROUND_ID = 2020;
 
     private static final String LOG_TAG = "e.y/Acceler...Service";
-    private static final String TAG = "HelloService";
 
     /**
      * How many events from sensor will be kept for determining alarm.
@@ -77,6 +83,9 @@ public class AccelerometerMonitoringService extends Service {
     //TODO: never used mLocationOnAlarmMoment
     private Location mLocationOnAlarmMoment;
 
+    //cotent provider loader
+    private CursorLoader mCursorLoader;
+    private int LOADER_LISTENER_ID = 1230;
 
 
     @Override
@@ -92,9 +101,34 @@ public class AccelerometerMonitoringService extends Service {
         mWakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, WAKE_LOCK_NAME);
         mWakeLock.acquire();
 
+        //Cursor for accessing new settings and stuff
+        mCursorLoader = new CursorLoader(this, Uri.parse("content://evyasonov.emergencyhelp.SettingsContentProvider/cte"), null, null, null, null);
+        mCursorLoader.registerListener(LOADER_LISTENER_ID, this);
+        mCursorLoader.startLoading();
         //*/
     } //*/
 
+
+    @Override
+    public void onLoadComplete(Loader<Cursor> arg0, Cursor cursor){
+        Log.d(LOG_TAG, "onLoadCompleteCursor");
+        cursor.moveToFirst();
+        StringBuilder res = new StringBuilder();
+
+        //android.os.Debug.waitForDebugger();
+        while(!cursor.isAfterLast()){
+            res.append("\n"+cursor.getString(cursor.getColumnIndex("id"))
+                    + " - "
+                    + cursor.getString(cursor.getColumnIndex("name"))
+                    + " - "
+                    + cursor.getString(cursor.getColumnIndex("name2"))
+            );
+            cursor.moveToNext();
+        }
+
+        //mResultView.setText(res);
+        Log.d(LOG_TAG, res.toString());
+    }
 
     public int onStartCommand(Intent intent, int flags, int startId){
         //ENABLE DEBUG in SERVICE FUUUUUUUUUCK
@@ -171,6 +205,12 @@ public class AccelerometerMonitoringService extends Service {
         stopForeground(true);
 
         mWakeLock.release();
+
+        if(mCursorLoader != null){
+            mCursorLoader.unregisterListener(this);
+            mCursorLoader.cancelLoad();
+            mCursorLoader.stopLoading();
+        }
 
         super.onDestroy();
         //*/

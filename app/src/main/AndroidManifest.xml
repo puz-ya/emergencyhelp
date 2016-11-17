@@ -60,14 +60,14 @@
             </intent-filter>
         </receiver>
 
-        <!--
+
         <provider
-            android:name=".MyContentProvider"
-            android:authorities="evyasonov.emergencyhelp.MyContentProvider"
+            android:name=".SettingsContentProvider"
+            android:authorities="evyasonov.emergencyhelp.SettingsContentProvider"
             android:exported="true"
             android:multiprocess="true" >
         </provider>
-        -->
+        <!---->
 
         <activity
             android:name=".AlarmActivity"

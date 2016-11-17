@@ -3,6 +3,7 @@ package evyasonov.emergencyhelp;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
@@ -17,8 +19,11 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import java.util.Arrays;
 import java.util.TreeSet;
@@ -382,5 +387,17 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                         .show();
             }
         }
+    }
+
+    public void onClickAddName(View view) {
+        ContentValues values = new ContentValues();
+        String sName1 = "YD key";//((EditText) findViewById(R.id.txtName)).getText().toString();
+        String sName2 = "YD value";
+
+        values.put(SettingsContentProvider.mName1, sName1);
+        values.put(SettingsContentProvider.mName2, sName2);
+        Uri uri = getContentResolver().insert(SettingsContentProvider.CONTENT_URI, values);
+        Toast.makeText(getBaseContext(), "New record inserted", Toast.LENGTH_SHORT)
+                .show();
     }
 }

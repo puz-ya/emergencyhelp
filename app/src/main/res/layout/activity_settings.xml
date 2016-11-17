@@ -34,12 +34,30 @@
                 <LinearLayout
                     android:id="@+id/tab1"
                     android:layout_width="fill_parent"
-                    android:layout_height="fill_parent">
+                    android:layout_height="fill_parent"
+                    android:orientation="vertical"
+                    >
 
                     <fragment android:name="evyasonov.emergencyhelp.SettingsFragmentUserInfo"
                         android:id="@+id/user_info_settings_fragment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content" />
+
+                    <Button
+                        android:id="@+id/btnRetrieve"
+                        android:layout_width="fill_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="onClickDisplayNames"
+                        android:text="Display names" />
+
+                    <TextView
+                        android:id="@+id/res"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="20dp"
+                        android:clickable="false"
+                        android:ems="10" >
+                    </TextView>
 
                 </LinearLayout>
 

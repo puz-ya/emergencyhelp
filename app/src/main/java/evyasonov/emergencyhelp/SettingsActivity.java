@@ -1,19 +1,32 @@
 package evyasonov.emergencyhelp;
 
 import android.app.Activity;
+import android.database.Cursor;
+import android.net.Uri;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.TabHost;
+import android.widget.TextView;
 
 
 public class SettingsActivity
-        extends Activity
-        implements AutoSummaryPreferenceFragment.OnSettingsChanged
+        extends FragmentActivity
+        implements AutoSummaryPreferenceFragment.OnSettingsChanged, LoaderManager.LoaderCallbacks<Cursor>
 {
     public static final String PREFERENCES_FILENAME = "preferences";
     private static final String LOG_TAG = "e.y/SettingsActivity";
     private static final int PIXELS_IN_MOTION = 70;
+
+    /* reading values from content provider */
+    TextView mResultView=null;
+    CursorLoader mCursorLoader;
+    /* ----- */
 
     private MessengerToAccelerometerMonitoringService mService;
     private TabHost mTabHost;
@@ -25,6 +38,7 @@ public class SettingsActivity
         Log.d(LOG_TAG, "onCreate");
 
         setContentView(R.layout.activity_settings);
+        mResultView = (TextView) findViewById(R.id.res);
 
         final String activeTabName = getIntent().getStringExtra(MainActivity.SETTINGS_TAB);
 
@@ -110,6 +124,41 @@ public class SettingsActivity
         }
 
         return false;
+    }
+
+
+    /* content provider part */
+    public void onClickDisplayNames(View view){
+        getSupportLoaderManager().initLoader(1, null, this);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1){
+        mCursorLoader = new CursorLoader(this, Uri.parse("content://evyasonov.emergencyhelp.SettingsContentProvider/cte"), null, null, null, null);
+        return mCursorLoader;
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> arg0, Cursor cursor){
+        cursor.moveToFirst();
+        StringBuilder res = new StringBuilder();
+
+        while(!cursor.isAfterLast()){
+            res.append("\n"+cursor.getString(cursor.getColumnIndex("id"))
+                    + " - "
+                    + cursor.getString(cursor.getColumnIndex("name"))
+                    + " - "
+                    + cursor.getString(cursor.getColumnIndex("name2"))
+            );
+            cursor.moveToNext();
+        }
+
+        mResultView.setText(res);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> arg0){
+        //auto-generated
     }
 
 }
