@@ -308,7 +308,12 @@ public class AccelerometerMonitoringService
         final SharedPreferences sharedPreferences = getApplicationContext()
                 .getSharedPreferences(SettingsActivity.PREFERENCES_FILENAME, MODE_MULTI_PROCESS);
 
-        mSensorThreshold = 9.81 * Integer.parseInt(sharedPreferences.getString("alarm_sensitive", "4"));
+        //must check for input values
+        String sAlarmSensitive = sharedPreferences.getString("alarm_sensitive", "4");
+        if(sAlarmSensitive.contains(".") || sAlarmSensitive.contains(",") || sAlarmSensitive.contains("-")){
+            sAlarmSensitive = "4";
+        }
+        mSensorThreshold = 9.81 * Integer.parseInt(sAlarmSensitive);
 
         mPhoneNumbers = new LinkedList<String>();
 
@@ -337,6 +342,15 @@ public class AccelerometerMonitoringService
         if (mLocationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
             gpsText = getString(R.string.notification_gps_on);
             icon = R.drawable.ic_stat_notify_ok;
+        }else{
+            //checking our last hope - Network provider
+            if (mLocationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+                gpsText = getString(R.string.notification_network_on);
+                icon = R.drawable.ic_stat_notify_ok;
+            }else{
+                Log.d(LOG_TAG, "GPS|NETWORK is OFF :(");
+                Toast.makeText(this,"GPS|NETWORK is OFF :(",Toast.LENGTH_SHORT).show();
+            }
         }
 
         final NotificationCompat.Builder builder =

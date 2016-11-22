@@ -11,12 +11,17 @@
     android:id="@+id/mainLayout"
     android:weightSum="1">
 
+    <!-- padding for better tapping on the switch -->
     <Switch
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/main_activity_status"
         android:id="@+id/statusSwitch"
-        android:checked="false" />
+        android:checked="false"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="24dp"
+        android:paddingBottom="24dp"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -25,10 +30,20 @@
         android:id="@+id/textView" />
 
     <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/main_activity_alarm"
+        android:onClick="onClickStartAlarm"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        />
+
+    <!-- Content provide SQLite testing
+    <Button
         android:id="@+id/btnAdd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:onClick="onClickAddName"
         android:text="Add Name" />
-
+    -->
 </LinearLayout>

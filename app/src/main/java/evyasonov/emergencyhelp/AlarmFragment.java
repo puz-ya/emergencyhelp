@@ -133,15 +133,21 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
         Log.d(LOG_TAG, "onResume");
 
         if (mCurrentMode == MODE_PRE_ALARM) {
-            mWaitingTime = 1000 * Integer.parseInt(
-                    mContext
-                            .getSharedPreferences(
-                                    SettingsActivity.PREFERENCES_FILENAME,
-                                    Context.MODE_MULTI_PROCESS)
-                            .getString("alarm_time", "60"));
+            String sAlarmTime = mContext
+                    .getSharedPreferences(
+                            SettingsActivity.PREFERENCES_FILENAME,
+                            Context.MODE_MULTI_PROCESS)
+                    .getString("alarm_time", "30");
+
+            //must check for input values
+            if(sAlarmTime.contains(",") || sAlarmTime.contains(".") || sAlarmTime.contains("-") ){
+                sAlarmTime = "30";
+            }
+
+            mWaitingTime = 1000 * Integer.parseInt(sAlarmTime);
             mStartTime = System.currentTimeMillis();
 
-            mMediaPlayer.start();
+            //mMediaPlayer.start(); //must be commented, in onCreate we already assigned setOnPreparedListener
 
             mBackgroundChangeTask = new ChangeBackgroundTask();
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {

@@ -1,6 +1,7 @@
 package evyasonov.emergencyhelp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
@@ -38,7 +39,9 @@ public class SettingsActivity
         Log.d(LOG_TAG, "onCreate");
 
         setContentView(R.layout.activity_settings);
-        mResultView = (TextView) findViewById(R.id.res);
+
+        //for ContentProvider only
+        //mResultView = (TextView) findViewById(R.id.res);
 
         final String activeTabName = getIntent().getStringExtra(MainActivity.SETTINGS_TAB);
 
@@ -126,6 +129,12 @@ public class SettingsActivity
         return false;
     }
 
+    //Because we decided not to let users kill an app from Android App List
+    public void onClickFinishSettingsActivity(View view){
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
+    }
 
     /* content provider part */
     public void onClickDisplayNames(View view){

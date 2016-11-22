@@ -1,5 +1,6 @@
 package evyasonov.emergencyhelp;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
@@ -8,14 +9,19 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
+import android.text.Layout;
+import android.text.SpannableString;
+import android.text.style.AlignmentSpan;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -40,6 +46,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     private SharedPreferences mSharedPreferences;
 
     private int mLastDialogNumber = 1;
+    private static final int INITIAL_REQUEST_4LOCATION = 1337;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -68,10 +75,11 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
     @Override
     public void onDestroy(){
-        Log.d(LOG_TAG, "onDestroy");
         super.onDestroy();
+        Log.d(LOG_TAG, "onDestroy");
     }
 
+    //Checking switch button of service off/on
     @Override
     public void onCheckedChanged(final CompoundButton compoundButton, final boolean isChecked) {
         Log.d(LOG_TAG, "onCheckedChanged");
@@ -125,49 +133,102 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
             Log.d(LOG_TAG, "emergencyContactsNOTEmpty");
 
-            //always store returned value ! debug, debug AND debug
-            //Implicit intents with startService are not safe: Intent ...
-            //Intent intent = new Intent("evyasonov.emergencyhelp.AccelerometerMonitoringService");
-
             Intent intent = new Intent(this, AccelerometerMonitoringService.class);
-            //intent.addCategory("evyasonov.emergencyhelp.AccelerometerMonitoringService");
             ComponentName componentName = startService(intent);
-
-            //intent.setPackage("evyasonov.emergencyhelp");
-            //bindService(intent, serviceConnection, Service.BIND_AUTO_CREATE);
-            //ComponentName componentName = startService(intent);
 
             Log.d(LOG_TAG, "startService");
 
-            final LocationManager locationManager =
-                    (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
-            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                new AlertDialog.Builder(this)
-                        .setMessage(getString(R.string.gps_off_dialog_description))
-                        .setPositiveButton(
-                                getString(R.string.gps_off_dialog_positive_button),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                                        dialogInterface.dismiss();
-                                    }
-                                }
-                        )
-                        .setNegativeButton(
-                                getString(R.string.gps_off_dialog_negative_button),
-                                new DialogInterface.OnClickListener() {
-                                    @Override
-                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                        dialogInterface.cancel();
-                                    }
-                                }
-                        )
-                        .create()
-                        .show();
+            //checking GPS permissions (API 21+)
+            // FINE_LOCATION is enough for both NETWORK & GPS
+            if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                // TODO: Consider calling
+                //    ActivityCompat#requestPermissions
+                // here to request the missing permissions, and then overriding
+                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                //                                          int[] grantResults)
+                // to handle the case where the user grants the permission. See the documentation
+                // for ActivityCompat#requestPermissions for more details.
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
+                        INITIAL_REQUEST_4LOCATION);
+
+                Toast.makeText(this, "Please, enable LOCATION ACCESS in settings.", Toast.LENGTH_SHORT).show();
+            }else{
+
+                checkLocationManagerAndShowDialog();
+
             }
+
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case INITIAL_REQUEST_4LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+
+                    // permission was granted, yay! Do the
+                    // contacts-related task you need to do.
+                    Toast.makeText(this, "Permission was granted, thank you!.", Toast.LENGTH_SHORT).show();
+                    checkLocationManagerAndShowDialog();
+
+                } else {
+
+                    // permission denied, boo! Disable the
+                    // functionality that depends on this permission.
+                    Toast.makeText(this, "Permission was not granted, aborting...", Toast.LENGTH_SHORT).show();
+                    finish();
+                }
+                return;
+            }
+
+            // other 'case' lines to check for other
+            // permissions this app might request
+        }
+    }
+
+    public void onClickStartAlarm(View view){
+        final Intent intent = new Intent(this, AlarmActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
+
+    private void checkLocationManagerAndShowDialog(){
+
+        final LocationManager locationManager =
+                (LocationManager) this.getSystemService(LOCATION_SERVICE);
+
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            new AlertDialog.Builder(this)
+                    .setMessage(getString(R.string.gps_off_dialog_description))
+                    .setPositiveButton(
+                            getString(R.string.gps_off_dialog_positive_button),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                    dialogInterface.dismiss();
+                                }
+                            }
+                    )
+                    .setNegativeButton(
+                            getString(R.string.gps_off_dialog_negative_button),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            }
+                    )
+                    .create()
+                    .show();
+        }
+
     }
 
     private void setAccelServiceOff() {
@@ -180,6 +241,18 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     @Override
     public boolean onCreateOptionsMenu(final Menu menu) {
         getMenuInflater().inflate(R.menu.main, menu);
+
+        //text of settings now right in the center
+        int nMenuItemsCount = menu.size();
+        for (int i=0; i<nMenuItemsCount; i++){
+            MenuItem item = menu.getItem(i);
+            SpannableString s = new SpannableString(item.getTitle());
+
+            s.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s.length(), 0);
+
+            item.setTitle(s);
+        }
+
         return true;
     }
 
@@ -189,7 +262,9 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
         switch (id) {
             case R.id.action_menu_deep_settings:
-                startActivity(new Intent(this, SettingsActivity.class));
+                Intent intent = new Intent(this, SettingsActivity.class);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
                 break;
 
             case R.id.action_menu_view_sms:
@@ -290,6 +365,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 .show();
     }
 
+    //
     public void executeDialogList() {
         if (mLastDialogNumber == 1) {
             final SensorManager sensorManager =

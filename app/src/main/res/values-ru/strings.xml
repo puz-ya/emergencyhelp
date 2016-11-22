@@ -20,30 +20,31 @@
     <string name="notification_gps_on">GPS включен</string>
     <string name="notification_description">Monitoring is ON, $GPS.</string>
     <string name="notification_sms_was_sent">Emergency SMSs was sent, monitoring was stopped</string>
-    <string name="notification_sms_was_sent_numbers">Numbers: </string>
+    <string name="notification_sms_was_sent_numbers">Номера:</string>
 
 
 
     <!-- ALARM ACTIVITY -->
     <string name="alarm_activity_label">ТРЕВОГА - Emergency Caller</string>
     <string name="alarm_screen_messages_sent">Сообщения были посланы</string>
-    <string name="alarm_screen_button_while_alarm">ОСТАНОВИТЬ ТРЕВОГУ</string>
+    <string name="alarm_screen_button_while_alarm">ОТМЕНА ТРЕВОГИ</string>
     <string name="alarm_screen_button_after_alarm">ОК</string>
     <string name="alarm_screen_description">Слежение ВЫКЛ. Сообщения были посланы.</string>
 
 
     <!-- MAIN ACTIVITY -->
     <string name="main_activity_label">Emergency Caller</string>
-    <string name="main_activity_status">Status:</string>
+    <string name="main_activity_status">Статус сервиса:</string>
     <string name="main_activity_description">
-    При сильном ударе Emergency Caller автоматически отправит смс с вашим местоположением и информацией о вас вашим родственикам и службе спасения.
-У вас будет 60 секунд для того, что бы отменить отправку.
-
-Данное приложение предоставляется \'как есть\' без каких-либо гарантий</string>
+        В случае аварии это приложение включит сигнал тревоги и через некоторое время автоматически отправит
+        текствое сообщение службе спасения и телефонам, которые вы добавили.\n\n
+        У вас будет некоторое время для отключения тревоги и отправки.\n\n
+        Приложение предоставляется \"КАК ЕСТЬ\", БЕЗ ГАРАНТИЙ ИЛИ КАКИХ-ЛИБО УСЛОВИЙ, явно выраженных или подразумеваемых.
+    </string>
 
     <!-- MAIN ACTIVITY MENU -->
     <string name="menu_deep_settings">Настройки</string>
-    <string name="menu_view_sms">Увидеть SMS</string>
+    <string name="menu_view_sms">Просмотреть SMS</string>
     <string name="menu_licence">Условия использования</string>
     <string name="menu_about">О приложении</string>
     <string name="menu_close_all">Закрыть</string>
@@ -88,7 +89,7 @@
     <!-- SETTINGS ACTIVITY -->
     <string name="settings_activity_label">Настройки - Emergency Caller</string>
     <string name="settings_tab_1_text">ОБО МНЕ</string>
-    <string name="settings_tab_2_text">ТЕЛЕФОНЫ</string>
+    <string name="settings_tab_2_text">НОМЕРА</string>
     <string name="settings_tab_3_text">ДРУГОЕ</string>
 
     <string name="settings_invalid_number">Неверный формат номера</string>
@@ -98,12 +99,15 @@
     <string name="settings_confirm_deleting_number_positive_button">Удалить</string>
     <string name="settings_confirm_deleting_number_negative_button">Не удалять</string>
 
-    <string name="settings_new_phone_number_hint">Номер телефона или имя из контактов</string>
+    <string name="settings_new_phone_number_hint">
+        Номер телефона или \n
+        имя из контактов
+    </string>
     <string name="settings_add_button_text">Добавить</string>
 
-    <string name="settings_bootload">Запускать при загрузке телефона</string>
-    <string name="settings_alarm_time">Alarm time</string>
-    <string name="settings_sensor_sensitivity">Sensor sensitivity</string>
+    <string name="settings_bootload">Запуск при загрузке</string>
+    <string name="settings_alarm_time">Таймер</string>
+    <string name="settings_sensor_sensitivity">Чувствительность акселерометра</string>
     <string name="settings_user_name">Имя</string>
     <string name="settings_user_comment">Дополнительная информация</string>
 
@@ -120,5 +124,9 @@
 
     <string name="device_has_no_accelerometer">Акселерометр на этом устройстве недоступен :(</string>
     <string name="device_has_no_accelerometer_exit">Выход</string>
+    <string name="main_activity_alarm">Включить Тревогу!</string>
+    <string name="notification_network_off">СЕТЬ недоступна</string>
+    <string name="notification_network_on">СЕТЬ доступна</string>
+    <string name="settings_close">Закрыть Настройки</string>
 
 </resources>

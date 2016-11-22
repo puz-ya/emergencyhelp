@@ -8,14 +8,15 @@
         <EditTextPreference
             android:key="alarm_time"
             android:title="@string/settings_alarm_time"
-            android:defaultValue="60"
+            android:defaultValue="30"
             android:selectAllOnFocus="true"
             android:inputType="numberSigned" />
 
+        <!-- defaultValue==5 norm to throw on the pillow -->
         <EditTextPreference
             android:key="alarm_sensitive"
             android:title="@string/settings_sensor_sensitivity"
-            android:defaultValue="4"
+            android:defaultValue="5"
             android:selectAllOnFocus="true"
             android:inputType="numberSigned" />
 </PreferenceScreen>
