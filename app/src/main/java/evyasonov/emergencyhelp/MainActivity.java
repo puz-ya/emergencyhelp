@@ -27,7 +27,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.Switch;
 import android.widget.Toast;
 
@@ -134,7 +133,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
             Log.d(LOG_TAG, "emergencyContactsNOTEmpty");
 
             Intent intent = new Intent(this, AccelerometerMonitoringService.class);
-            ComponentName componentName = startService(intent);
+            ComponentName componentName = startService(intent); //componentName just for debug
 
             Log.d(LOG_TAG, "startService");
 
@@ -142,8 +141,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
             //checking GPS permissions (API 21+)
             // FINE_LOCATION is enough for both NETWORK & GPS
             if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // TODO: Consider calling
-                //    ActivityCompat#requestPermissions
+                // Consider calling ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
                 //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
                 //                                          int[] grantResults)
@@ -172,15 +170,13 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 if (grantResults.length > 0
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
-                    // permission was granted, yay! Do the
-                    // contacts-related task you need to do.
+                    // permission was granted, yay! Do the task you need to do.
                     Toast.makeText(this, "Permission was granted, thank you!.", Toast.LENGTH_SHORT).show();
                     checkLocationManagerAndShowDialog();
 
                 } else {
 
-                    // permission denied, boo! Disable the
-                    // functionality that depends on this permission.
+                    // permission denied! Disable the functionality that depends on this.
                     Toast.makeText(this, "Permission was not granted, aborting...", Toast.LENGTH_SHORT).show();
                     finish();
                 }
@@ -246,11 +242,11 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         int nMenuItemsCount = menu.size();
         for (int i=0; i<nMenuItemsCount; i++){
             MenuItem item = menu.getItem(i);
-            SpannableString s = new SpannableString(item.getTitle());
+            SpannableString sOptionsString = new SpannableString(item.getTitle());
 
-            s.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, s.length(), 0);
+            sOptionsString.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER), 0, sOptionsString.length(), 0);
 
-            item.setTitle(s);
+            item.setTitle(sOptionsString);
         }
 
         return true;
@@ -470,9 +466,11 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         String sName1 = "YD key";//((EditText) findViewById(R.id.txtName)).getText().toString();
         String sName2 = "YD value";
 
-        values.put(SettingsContentProvider.mName1, sName1);
-        values.put(SettingsContentProvider.mName2, sName2);
+        values.put(SettingsContentProvider.mSettingsKey, sName1);
+        values.put(SettingsContentProvider.mSettingsValue, sName2);
         Uri uri = getContentResolver().insert(SettingsContentProvider.CONTENT_URI, values);
+        //Uri uri2 = getContentResolver().update(...);
+
         Toast.makeText(getBaseContext(), "New record inserted", Toast.LENGTH_SHORT)
                 .show();
     }

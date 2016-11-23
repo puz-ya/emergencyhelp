@@ -26,7 +26,7 @@ import java.io.IOException;
 
 
 public class AlarmFragment extends Fragment implements View.OnClickListener {
-    private static final String LOG_TAG = "evyasonov/AlarmFragment";
+    private static final String LOG_TAG = "e.y/AlarmFragment";
 
     private View mFragmentView;
     private RelativeLayout mLayout;

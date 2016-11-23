@@ -9,7 +9,8 @@
         android:inputType="textCapWords"
         android:capitalize="words"
         android:singleLine="true"
-        android:maxLines="1" />
+        android:maxLines="1"
+        />
 
     <EditTextPreference
         android:key="user_comment"

@@ -86,6 +86,8 @@ public class AccelerometerMonitoringService
     //cotent provider loader
     private CursorLoader mCursorLoader;
     private int LOADER_LISTENER_ID = 1230;
+    private CursorLoader mCursorLoaderPhones;
+    private int LOADER_LISTENER_ID_PHONES = 1231;
 
 
     @Override
@@ -102,32 +104,51 @@ public class AccelerometerMonitoringService
         mWakeLock.acquire();
 
         //Cursor for accessing new settings and stuff
-        mCursorLoader = new CursorLoader(this, Uri.parse("content://evyasonov.emergencyhelp.SettingsContentProvider/cte"), null, null, null, null);
-        mCursorLoader.registerListener(LOADER_LISTENER_ID, this);
+        mCursorLoader = new CursorLoader(this, SettingsContentProvider.CONTENT_URI, null, null, null, null);
+        mCursorLoader.registerListener(LOADER_LISTENER_ID, mLoaderSettings);
         mCursorLoader.startLoading();
+
+        mCursorLoaderPhones = new CursorLoader(this, SettingsContentProvider.CONTENT_URI_PHONES, null, null, null, null);
+        mCursorLoaderPhones.registerListener(LOADER_LISTENER_ID_PHONES, mLoaderPhones);
+        mCursorLoaderPhones.startLoading();
         //*/
     } //*/
 
 
+    Loader.OnLoadCompleteListener<Cursor> mLoaderSettings = new Loader.OnLoadCompleteListener<Cursor>(){
+        @Override
+        public void onLoadComplete(Loader<Cursor> arg0, Cursor cursor){
+            Log.d(LOG_TAG, "onLoadCompleteSettingsCursor");
+            cursor.moveToFirst();
+            StringBuilder res = new StringBuilder();
+
+            //android.os.Debug.waitForDebugger();
+            while(!cursor.isAfterLast()){
+                res.append("\n"
+                        + cursor.getString(cursor.getColumnIndex("name"))
+                        + " - "
+                        + cursor.getString(cursor.getColumnIndex("name2"))
+                );
+                cursor.moveToNext();
+            }
+
+            //mResultView.setText(res);
+
+            Log.d(LOG_TAG, res.toString());
+        }
+    };
+
+    Loader.OnLoadCompleteListener<Cursor> mLoaderPhones = new Loader.OnLoadCompleteListener<Cursor>(){
+        @Override
+        public void onLoadComplete(Loader<Cursor> arg0, Cursor cursor){
+            Log.d(LOG_TAG, "onLoadCompletePhonesCursor");
+        }
+    };
+
     @Override
     public void onLoadComplete(Loader<Cursor> arg0, Cursor cursor){
-        Log.d(LOG_TAG, "onLoadCompleteCursor");
-        cursor.moveToFirst();
-        StringBuilder res = new StringBuilder();
-
-        //android.os.Debug.waitForDebugger();
-        while(!cursor.isAfterLast()){
-            res.append("\n"+cursor.getString(cursor.getColumnIndex("id"))
-                    + " - "
-                    + cursor.getString(cursor.getColumnIndex("name"))
-                    + " - "
-                    + cursor.getString(cursor.getColumnIndex("name2"))
-            );
-            cursor.moveToNext();
-        }
-
-        //mResultView.setText(res);
-        Log.d(LOG_TAG, res.toString());
+        //not using it, but necessary for "implements Loader.OnLoadCompleteListener<Cursor>"
+        //we are using mLoaderSettings, mLoaderPhones
     }
 
     public int onStartCommand(Intent intent, int flags, int startId){
@@ -146,7 +167,7 @@ public class AccelerometerMonitoringService
 
         //Sticky – A sticky service will be restarted, and a null intent will be delivered to OnStartCommand at restart.
         // Used when the service is continuously performing a long-running operation, such as updating a stock feed.
-        Log.d(LOG_TAG, "onStartCommand_return");
+        //Log.d(LOG_TAG, "onStartCommand_return");
         return START_STICKY;
         //return START_REDELIVER_INTENT;    //the last intent that was delivered to OnStartCommand before the service was stopped
     } //*/
@@ -207,9 +228,14 @@ public class AccelerometerMonitoringService
         mWakeLock.release();
 
         if(mCursorLoader != null){
-            mCursorLoader.unregisterListener(this);
+            mCursorLoader.unregisterListener(mLoaderSettings);
             mCursorLoader.cancelLoad();
             mCursorLoader.stopLoading();
+        }
+        if(mCursorLoaderPhones != null){
+            mCursorLoaderPhones.unregisterListener(mLoaderPhones);
+            mCursorLoaderPhones.cancelLoad();
+            mCursorLoaderPhones.stopLoading();
         }
 
         super.onDestroy();
@@ -372,7 +398,6 @@ public class AccelerometerMonitoringService
                 PendingIntent.getActivity(this, 1, notificationIntent, 0);
         builder.setContentIntent(notificationClickIntent);
 
-        //todo: ??
         Log.d(LOG_TAG, "startForeground");
         startForeground(FOREGROUND_ID, builder.build());
     }
@@ -432,7 +457,6 @@ public class AccelerometerMonitoringService
     private final MyLocationListener mLocationListener = new MyLocationListener();
 
 // TODO: Кнопка "Добавить" должна быть видна везде
-// TODO: Текст Автозагрузки не вмещается
 // TODO: в смс лишние цифры
 
     /**
