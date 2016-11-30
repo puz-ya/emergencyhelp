@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="evyasonov.emergencyhelp" >
+    package="e_and_y.emergencyhelp" >
 
     <!-- <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -10,16 +10,19 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <!-- for alarm sound vvv -->
+    <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY" />
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
-        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name5"
         android:theme="@style/AppTheme"
         >
         <activity
             android:name=".MainActivity"
-            android:label="@string/main_activity_label"
+            android:label="@string/main_activity_label5"
             android:launchMode="singleTask"
             android:configChanges="orientation|screenSize"
 
@@ -47,7 +50,7 @@
             android:stopWithTask="false"
             >
             <intent-filter>
-                <action android:name="evyasonov.emergencyhelp.AccelerometerMonitoringService" />
+                <action android:name="e_and_y.emergencyhelp.AccelerometerMonitoringService" />
             </intent-filter>
         </service>
 
@@ -63,9 +66,10 @@
 
         <provider
             android:name=".SettingsContentProvider"
-            android:authorities="evyasonov.emergencyhelp.SettingsContentProvider"
-            android:exported="true"
-            android:multiprocess="true" >
+            android:authorities="e_and_y.emergencyhelp.SettingsContentProvider"
+            android:exported="false"
+            android:multiprocess="true"
+            >
         </provider>
         <!---->
 

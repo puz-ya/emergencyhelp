@@ -5,20 +5,23 @@
 
     <!-- SMS MESSAGE -->
     <string name="message_template">
-        Скорее всего мне нужна помощь. Мой телефон зарегистрировал сильный удар. Возможно это автомобильная авария.
-        $name_sentence $addition_info_sentence $location_sentence
-        Это автоматическое сообщение ($time).</string>
-    <string name="name_sentence">Имя: $name.</string>
-    <string name="addition_info_sentence">Доп. информация: $addition_info.</string>
+        Зафиксирован сильный удар ($time UTC). Возможно это автомобильная авария и мне ($name_sentence) нужна помощь.
+        $addition_info_sentence $location_sentence
+        Это автоматическое сообщение.
+    </string>
+    <string name="name_sentence">Имя: $name</string>
+    <string name="addition_info_sentence">Информация: $addition_info.</string>
     <string name="location_sentence">Координаты ($minutes_pass мин. назад): широта=$latitude, долгота=$longitude $accuracy_sentence.</string>
     <string name="accuracy_sentence">(точность $accuracy м.)</string>
 
 
     <!-- SERVICE NOTIFICATION -->
     <string name="notification_title">Emergency Caller</string>
-    <string name="notification_gps_off">GPS выключен</string>
-    <string name="notification_gps_on">GPS включен</string>
-    <string name="notification_description">Monitoring is ON, $GPS.</string>
+    <string name="notification_gps_off">GPS ВЫКЛ</string>
+    <string name="notification_gps_on">GPS ВКЛ</string>
+    <string name="notification_network_off">СЕТЬ ВЫКЛ</string>
+    <string name="notification_network_on">СЕТЬ ВКЛ</string>
+    <string name="notification_description">Сервис ВКЛ, $GPS</string>
     <string name="notification_sms_was_sent">Emergency SMSs was sent, monitoring was stopped</string>
     <string name="notification_sms_was_sent_numbers">Номера:</string>
 
@@ -53,14 +56,14 @@
     <string name="gps_off_dialog_description">
         Включите GPS для возможности определения местоположения.</string>
     <string name="gps_off_dialog_positive_button">ОК</string>
-    <string name="gps_off_dialog_negative_button">Проигнорировать</string>
+    <string name="gps_off_dialog_negative_button">Игнорировать</string>
 
     <!-- OPEN SETTINGS ON FIRST LAUNCH DIALOG  -->
     <string name="first_launch_open_settings_dialog_description">
         Укажите номера и другую информацию для отправки экстренных SMS-сообщений.
     </string>
     <string name="first_launch_open_settings_positive_button">В настройки</string>
-    <string name="first_launch_open_settings_negative_button">Проигнорировать</string>
+    <string name="first_launch_open_settings_negative_button">Игнорировать</string>
 
     <!-- SIM IS NOT AVAILABLE -->
     <string name="sim_is_not_available_description">SIM-карта недоступна.</string>
@@ -125,8 +128,7 @@
     <string name="device_has_no_accelerometer">Акселерометр на этом устройстве недоступен :(</string>
     <string name="device_has_no_accelerometer_exit">Выход</string>
     <string name="main_activity_alarm">Включить Тревогу!</string>
-    <string name="notification_network_off">СЕТЬ недоступна</string>
-    <string name="notification_network_on">СЕТЬ доступна</string>
+
     <string name="settings_close">Закрыть Настройки</string>
 
 </resources>

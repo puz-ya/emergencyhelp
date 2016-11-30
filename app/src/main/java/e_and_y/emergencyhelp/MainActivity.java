@@ -1,4 +1,4 @@
-package evyasonov.emergencyhelp;
+package e_and_y.emergencyhelp;
 
 import android.Manifest;
 import android.app.Activity;
@@ -12,6 +12,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
+import android.location.Location;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -28,15 +29,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.util.Arrays;
 import java.util.TreeSet;
 
+import static java.lang.String.valueOf;
+
 
 public class MainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
-    public static final String SETTINGS_TAB = "evyasonov.emergencyhelp.SETTINGS_TAB";
+    public static final String SETTINGS_TAB = "e_and_y.emergencyhelp.SETTINGS_TAB";
 
     private static final String LOG_TAG = "e.y/MainActivity";
 
@@ -46,6 +52,8 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
     private int mLastDialogNumber = 1;
     private static final int INITIAL_REQUEST_4LOCATION = 1337;
+
+    private Location mLocation = null;
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -58,6 +66,11 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         executeDialogList();
 
         setContentView(R.layout.activity_main);
+
+        if(getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayShowHomeEnabled(true);
+            getSupportActionBar().setIcon(R.mipmap.ic_launcher);
+        }
 
         mStatusSwitch = (Switch) findViewById(R.id.statusSwitch);
     }
@@ -138,24 +151,40 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
             Log.d(LOG_TAG, "startService");
 
 
-            //checking GPS permissions (API 21+)
-            // FINE_LOCATION is enough for both NETWORK & GPS
+            //checking GPS permissions (API 21+) FINE_LOCATION is enough for both NETWORK & GPS
             if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 // Consider calling ActivityCompat#requestPermissions
                 // here to request the missing permissions, and then overriding
                 //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
                 //                                          int[] grantResults)
-                // to handle the case where the user grants the permission. See the documentation
-                // for ActivityCompat#requestPermissions for more details.
-                ActivityCompat.requestPermissions(MainActivity.this,
+                // to handle the case where the user grants the permission.
+                ActivityCompat.requestPermissions(
+                        MainActivity.this,
                         new String[] {Manifest.permission.ACCESS_FINE_LOCATION},
-                        INITIAL_REQUEST_4LOCATION);
+                        INITIAL_REQUEST_4LOCATION
+                );
 
                 Toast.makeText(this, "Please, enable LOCATION ACCESS in settings.", Toast.LENGTH_SHORT).show();
             }else{
 
-                checkLocationManagerAndShowDialog();
 
+                MyLocation.LocationResult locationResult = new MyLocation.LocationResult(){
+                    @Override
+                    public void gotLocation(Location location){
+                        //Got the location!
+                        mLocation = location;
+                    }
+                };
+                MyLocation myLocation = new MyLocation();
+                boolean bRes = myLocation.getLocation(this, locationResult);
+
+                if(mLocation != null){
+                    Toast.makeText(MainActivity.this, "_SUCCESS!_", Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(MainActivity.this, "_FAILED!_", Toast.LENGTH_LONG).show();
+                }
+
+                checkLocationManagerAndShowDialog();
             }
 
         }
@@ -230,7 +259,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     private void setAccelServiceOff() {
         Log.d(LOG_TAG, "setAccelServiceOff");
 
-        stopService(new Intent("evyasonov.emergencyhelp.AccelerometerMonitoringService"));
+        stopService(new Intent("e_and_y.emergencyhelp.AccelerometerMonitoringService"));
     }
 
 

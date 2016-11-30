@@ -1,4 +1,4 @@
-package evyasonov.emergencyhelp;
+package e_and_y.emergencyhelp;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

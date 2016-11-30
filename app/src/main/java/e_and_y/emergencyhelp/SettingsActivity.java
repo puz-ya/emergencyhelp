@@ -1,6 +1,5 @@
-package evyasonov.emergencyhelp;
+package e_and_y.emergencyhelp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -143,7 +142,7 @@ public class SettingsActivity
 
     @Override
     public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1){
-        mCursorLoader = new CursorLoader(this, Uri.parse("content://evyasonov.emergencyhelp.SettingsContentProvider/cte"), null, null, null, null);
+        mCursorLoader = new CursorLoader(this, Uri.parse("content://e_and_y.emergencyhelp.SettingsContentProvider/cte"), null, null, null, null);
         return mCursorLoader;
     }
 

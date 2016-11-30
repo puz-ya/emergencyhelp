@@ -1,4 +1,4 @@
-package evyasonov.emergencyhelp;
+package e_and_y.emergencyhelp;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -7,7 +7,6 @@ import android.preference.EditTextPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
-import android.widget.Toast;
 
 
 /**
@@ -15,12 +14,11 @@ import android.widget.Toast;
  */
 
 public /* static */ class SettingsFragmentUserInfo
-        extends PreferenceFragment //AutoSummaryPreferenceFragment {
-
-{
+        //extends PreferenceFragment {
+        extends AutoSummaryPreferenceFragment {
 
     final String[] mKeys = {"user_name", "user_comment"};
-    //bindKeys(keys);
+
     Context mSettingsActivity = null;
 
     @Override
@@ -30,8 +28,8 @@ public /* static */ class SettingsFragmentUserInfo
     }
 
     @Override
-    public void onActivityCreated(Bundle _savedInstanceState) {
-        super.onActivityCreated(_savedInstanceState);
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
 
         if(isAdded()){
             //Fragments are slightly unstable and getActivity returns null some times,
@@ -76,6 +74,8 @@ public /* static */ class SettingsFragmentUserInfo
             }
         });
 
+        //TODO: old SharedPreference + AutoSummaryPreferenceFragment
+        bindKeys(mKeys);
     }
 
     private int updateValuesInDB(String key, String value){

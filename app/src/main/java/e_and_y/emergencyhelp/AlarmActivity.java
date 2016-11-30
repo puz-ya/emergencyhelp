@@ -1,4 +1,4 @@
-package evyasonov.emergencyhelp;
+package e_and_y.emergencyhelp;
 
 import android.app.Activity;
 import android.app.Fragment;

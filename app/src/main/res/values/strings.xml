@@ -2,25 +2,32 @@
 <resources>
 
     <string name="app_name">Emergency Caller</string>
+    <string name="app_name2">SaveMeNow</string>
+    <string name="app_name3">Save Me Now</string>
+
+    <string name="app_name4">CoverMyTrip</string>
+    <string name="app_name5">Cover My Trip</string>
+
 
     <!-- SMS MESSAGE -->
     <string name="message_template">
-        Heavy hit registered. It may be a car accident, and I need help.
-        $name_sentence $addition_info_sentence $location_sentence
-        This is an automatic sms.</string>
-    <string name="name_sentence">Name: $name.</string>
+        Heavy hit registered ($time UTC). It may be a car accident, and I ($name_sentence) need help.
+        $addition_info_sentence $location_sentence
+        This is an automatic sms.
+    </string>
+    <string name="name_sentence">Name: $name</string>
     <string name="addition_info_sentence">Info: $addition_info.</string>
-    <string name="location_sentence">Coordinates ($minutes_pass min. ago): latitude=$latitude, longitude=$longitude, $accuracy_sentence time=$time (UTC).</string>
+    <string name="location_sentence">Coordinates ($minutes_pass min. ago): latitude=$latitude, longitude=$longitude, $accuracy_sentence.</string>
     <string name="accuracy_sentence">(accuracy $accuracy m.)</string>
 
 
     <!-- SERVICE NOTIFICATION -->
     <string name="notification_title">Emergency Caller</string>
-    <string name="notification_gps_off">GPS is OFF</string>
-    <string name="notification_gps_on">GPS is ON</string>
-    <string name="notification_network_on">NETWORK is ON</string>
-    <string name="notification_network_off">NETWORK is OFF</string>
-    <string name="notification_description">Monitoring is ON, $GPS.</string>
+    <string name="notification_gps_off">GPS OFF</string>
+    <string name="notification_gps_on">GPS ON</string>
+    <string name="notification_network_on">NETWORK ON</string>
+    <string name="notification_network_off">NETWORK OFF</string>
+    <string name="notification_description">Service ON, $GPS</string>
     <string name="notification_sms_was_sent">Emergency SMSs was sent, monitoring was stopped</string>
     <string name="notification_sms_was_sent_numbers">Numbers: </string>
 
@@ -39,6 +46,12 @@
 
     <!-- MAIN ACTIVITY -->
     <string name="main_activity_label">Emergency Caller</string>
+    <string name="main_activity_label2">SaveMeNow</string>
+    <string name="main_activity_label3">Save Me Now</string>
+
+    <string name="main_activity_label4">CoverMyTrip</string>
+    <string name="main_activity_label5">Cover My Trip</string>
+
     <string name="main_activity_status">Service status:</string>
     <string name="main_activity_description">
         In case of heavy hit this app enables an alarm and after some time automatically sends

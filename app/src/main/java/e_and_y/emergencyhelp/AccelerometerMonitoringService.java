@@ -1,4 +1,4 @@
-package evyasonov.emergencyhelp;
+package e_and_y.emergencyhelp;
 
 import android.app.ActivityManager;
 import android.app.NotificationManager;
@@ -15,7 +15,6 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -119,22 +118,24 @@ public class AccelerometerMonitoringService
         @Override
         public void onLoadComplete(Loader<Cursor> arg0, Cursor cursor){
             Log.d(LOG_TAG, "onLoadCompleteSettingsCursor");
-            cursor.moveToFirst();
-            StringBuilder res = new StringBuilder();
+            if(cursor != null) {
+                cursor.moveToFirst();
+                StringBuilder res = new StringBuilder();
 
-            //android.os.Debug.waitForDebugger();
-            while(!cursor.isAfterLast()){
-                res.append("\n"
-                        + cursor.getString(cursor.getColumnIndex("name"))
-                        + " - "
-                        + cursor.getString(cursor.getColumnIndex("name2"))
-                );
-                cursor.moveToNext();
+                //android.os.Debug.waitForDebugger();
+                while (!cursor.isAfterLast()) {
+                    res.append("\n"
+                            + cursor.getString(cursor.getColumnIndex("name"))
+                            + " - "
+                            + cursor.getString(cursor.getColumnIndex("name2"))
+                    );
+                    cursor.moveToNext();
+                }
+
+                //mResultView.setText(res);
+
+                Log.d(LOG_TAG, res.toString());
             }
-
-            //mResultView.setText(res);
-
-            Log.d(LOG_TAG, res.toString());
         }
     };
 
@@ -142,6 +143,7 @@ public class AccelerometerMonitoringService
         @Override
         public void onLoadComplete(Loader<Cursor> arg0, Cursor cursor){
             Log.d(LOG_TAG, "onLoadCompletePhonesCursor");
+            //TODO: set loader for phone contacts
         }
     };
 
@@ -263,7 +265,7 @@ public class AccelerometerMonitoringService
         mLocationManager.removeUpdates(mLocationListener);
         mLocationManager.requestLocationUpdates(
                 LocationManager.GPS_PROVIDER,
-                1000 * 60 * GPS_FREQUENCY_IN_MINUTES,
+                1000, //1000 * 60 * GPS_FREQUENCY_IN_MINUTES,
                 GPS_MIN_DISTANCE_SENSIVITY,
                 mLocationListener);
 
@@ -379,13 +381,20 @@ public class AccelerometerMonitoringService
             }
         }
 
-        final NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(this)
-                        .setSmallIcon(icon)
-                        .setContentTitle(getString(R.string.notification_title))
-                        .setContentText(
-                            getString(R.string.notification_description).replace("$GPS", gpsText)
-                        );
+        String sLocationNotification = " Loc: ";
+        Location location = mLocationListener.getLastLocation();
+        if(location != null){
+            sLocationNotification += location.getLatitude();
+            sLocationNotification += ", ";
+            sLocationNotification += location.getLongitude();
+        }else{
+            sLocationNotification += "Unknown :(";
+        }
+
+        final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        builder.setSmallIcon(icon);
+        builder.setContentTitle(getString(R.string.notification_title));
+        builder.setContentText(getString(R.string.notification_description).replace("$GPS", gpsText + sLocationNotification));
 
         Log.d(LOG_TAG, "notificationIntent");
 
@@ -534,9 +543,7 @@ public class AccelerometerMonitoringService
 
             Log.d(LOG_TAG, "isLocationBetter");
 
-            if (newLocation == null) {
-                return true;
-            }
+            //first checking current\old location
             if(mBestLocation == null){
                 mBestLocation = new Location("test_provider");//provider name is unecessary
                 mBestLocation.setLatitude(0.0d);//coords of course
@@ -545,6 +552,10 @@ public class AccelerometerMonitoringService
                 mBestLocation.setAccuracy(SIGNIFICANT_ACCURACY_IN_METERS);
             }
 
+            //now checking is there some new location
+            if (newLocation == null) {
+                return false;
+            }
 
             // Check whether the new location fix is newer or older
             final long timeDelta = newLocation.getTime() - mBestLocation.getTime();

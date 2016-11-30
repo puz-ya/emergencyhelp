@@ -1,4 +1,4 @@
-package evyasonov.emergencyhelp;
+package e_and_y.emergencyhelp;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -31,7 +31,7 @@ import java.util.HashMap;
 @SuppressWarnings("ConstantConditions") //for getContentResolver()
 public class SettingsContentProvider extends ContentProvider {
 
-    static final String PROVIDER_NAME = "evyasonov.emergencyhelp.SettingsContentProvider";
+    static final String PROVIDER_NAME = "e_and_y.emergencyhelp.SettingsContentProvider";
     //for settings
     static final String URL = "content://" + PROVIDER_NAME + "/cte";
     static final Uri CONTENT_URI = Uri.parse(URL);

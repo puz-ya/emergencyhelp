@@ -1,4 +1,4 @@
-package evyasonov.emergencyhelp;
+package e_and_y.emergencyhelp;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -22,10 +22,13 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.io.FileInputStream;
 import java.io.IOException;
 
 
-public class AlarmFragment extends Fragment implements View.OnClickListener {
+public class AlarmFragment
+        extends Fragment
+        implements View.OnClickListener {
     private static final String LOG_TAG = "e.y/AlarmFragment";
 
     private View mFragmentView;
@@ -51,6 +54,7 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
 
     private int mCurrentMode = MODE_PRE_ALARM;
 
+    /*
     @Override
     public void onAttach(final Activity activity) {
         super.onAttach(activity);
@@ -60,6 +64,19 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
 
         if (mContext == null) {
             mContext = activity.getApplicationContext();
+        }
+
+        releaseActivityWindow();
+    } */
+
+    @Override
+    public void onAttach(final Context context){
+        super.onAttach(context);
+        Log.d(LOG_TAG, "onAttach");
+
+        if (context instanceof Activity){
+            mActivity = (Activity) context;
+            mContext = mActivity.getApplicationContext();
         }
 
         releaseActivityWindow();
@@ -74,15 +91,45 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
 
         setRetainInstance(true);
 
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        if(isAdded()){
+            //Fragments are slightly unstable and getActivity returns null some times,
+            //so, always check the isAdded() method of fragment before getting context by getActivity()
+            mActivity = getActivity();
+            mContext = mActivity.getApplicationContext();
+        }else{
+            Log.d("SettingsFragment","Couldn\'t load AlarmActivity context");
+            return;
+        }
+
         mVibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
 
-        final AssetFileDescriptor alarmSound = getResources().openRawResourceFd(R.raw.alarm_sound);
+        mService = new MessengerToAccelerometerMonitoringService(mContext, mMessageHandler);
+        mService.bindService();
+
+        //creating player with alarm sound
+        final AssetFileDescriptor alarmSound = mActivity.getResources().openRawResourceFd(R.raw.alarm_sound);
+
+        //if volume was "silent" or "vibro"
+        AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
+
+        int alarmType = AudioManager.STREAM_ALARM;
+        audioManager.setStreamVolume(
+                alarmType,
+                audioManager.getStreamMaxVolume(alarmType),
+                AudioManager.FLAG_SHOW_UI);
 
         mMediaPlayer = new MediaPlayer();
-        mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+        mMediaPlayer.setAudioStreamType(alarmType);
         mMediaPlayer.setLooping(true);
         try {
-            mMediaPlayer.setDataSource(alarmSound.getFileDescriptor());
+            mMediaPlayer.setDataSource(alarmSound.getFileDescriptor(), alarmSound.getStartOffset(), alarmSound.getLength());
             //mMediaPlayer.prepare();
             // You will get Error (-38,0) IF you call mediaPlayer.start() before it has reached the prepared state.
             mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
@@ -95,14 +142,20 @@ public class AlarmFragment extends Fragment implements View.OnClickListener {
             mMediaPlayer.prepareAsync();
 
             alarmSound.close();
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ex) {
+            Log.d(LOG_TAG, "IOException: ", ex);
+            // fall through
+        } catch (IllegalArgumentException ex) {
+            Log.d(LOG_TAG, "IllegalArgumentException: ", ex);
+            // fall through
+        } catch (SecurityException ex) {
+            Log.d(LOG_TAG, "SecurityException: ", ex);
+            // fall through
         }
+
         // TODO: Handle exception (if audio can't be loaded
         // TODO: check if mMediaManager is null
 
-        mService = new MessengerToAccelerometerMonitoringService(mContext, mMessageHandler);
-        mService.bindService();
     }
 
     @Override

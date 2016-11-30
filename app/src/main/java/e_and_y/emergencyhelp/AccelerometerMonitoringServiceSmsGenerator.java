@@ -1,4 +1,4 @@
-package evyasonov.emergencyhelp;
+package e_and_y.emergencyhelp;
 
 import android.content.Context;
 import android.content.res.Resources;
@@ -28,18 +28,18 @@ import java.util.Locale;
 
             //TODO: const 6e5 ? 600 000s ? 1ms == 0.001s
             //TODO: timeZONES ?
-            locationMinutesPass = String.format("%.1f", (System.currentTimeMillis() - location.getTime()) / 6e5);
-            locationLatitude = String.format("%.6f", location.getLatitude());
-            locationLongitude = String.format("%.6f", location.getLongitude());
+            locationMinutesPass = String.format(Locale.US, "%.1f", (System.currentTimeMillis() - location.getTime()) / 6e5);
+            locationLatitude = String.format(Locale.US, "%.6f", location.getLatitude());
+            locationLongitude = String.format(Locale.US, "%.6f", location.getLongitude());
 
             if(location.hasAccuracy()){
                 locationAccuracy = res.getString(R.string.accuracy_sentence).replace("$accuracy", location.getAccuracy() + "");
             }
 
         }else{
-            locationMinutesPass = "?GPS_error?";
-            locationLatitude = "?GPS_error?";
-            locationLongitude = "?GPS_error?";
+            locationMinutesPass = "?GPS?";
+            locationLatitude = "?GPS?";
+            locationLongitude = "?GPS?";
             locationAccuracy = res.getString(R.string.accuracy_sentence).replace("$accuracy", "???");
         }
 

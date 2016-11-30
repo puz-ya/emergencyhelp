@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="evyasonov.emergencyhelp.SettingsFragmentPhones"
+    tools:context="e_and_y.emergencyhelp.SettingsFragmentPhones"
     android:id="@+id/phones_settings_fragment_m">
 
 
