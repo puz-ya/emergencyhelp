@@ -1,24 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- APP NAME must be 10 letters MAX -->
     <string name="app_name">Emergency Caller</string>
     <string name="app_name2">SaveMeNow</string>
     <string name="app_name3">Save Me Now</string>
 
     <string name="app_name4">CoverMyTrip</string>
-    <string name="app_name5">Cover My Trip</string>
+    <string name="app_name6">Cover My Trip</string>
+
+    <string name="app_name5">Safe Trip</string>
 
 
     <!-- SMS MESSAGE -->
     <string name="message_template">
-        Heavy hit registered ($time UTC). It may be a car accident, and I ($name_sentence) need help.
+        Heavy hit registered ($time). It may be $name_sentence need help.
         $addition_info_sentence $location_sentence
         This is an automatic sms.
     </string>
-    <string name="name_sentence">Name: $name</string>
+    <string name="name_sentence">I: $name</string>
     <string name="addition_info_sentence">Info: $addition_info.</string>
     <string name="location_sentence">Coordinates ($minutes_pass min. ago): latitude=$latitude, longitude=$longitude, $accuracy_sentence.</string>
     <string name="accuracy_sentence">(accuracy $accuracy m.)</string>
+    <string name="location_error_sentence">Location: unknown.</string>
 
 
     <!-- SERVICE NOTIFICATION -->
@@ -34,7 +38,7 @@
 
 
     <!-- ALARM ACTIVITY -->
-    <string name="alarm_activity_label">ALARM - Emergency Caller</string>
+    <string name="alarm_activity_label">ALARM</string>
     <string name="alarm_screen_messages_sent">Messages has been sent</string>
     <string name="alarm_screen_button_while_alarm">STOP ALARM</string>
     <string name="alarm_screen_button_after_alarm">OK</string>
@@ -50,7 +54,9 @@
     <string name="main_activity_label3">Save Me Now</string>
 
     <string name="main_activity_label4">CoverMyTrip</string>
-    <string name="main_activity_label5">Cover My Trip</string>
+    <string name="main_activity_label44">Cover My Trip</string>
+
+    <string name="main_activity_label5">Safe Trip</string>
 
     <string name="main_activity_status">Service status:</string>
     <string name="main_activity_description">
@@ -64,8 +70,9 @@
     <!-- MAIN ACTIVITY MENU -->
     <string name="menu_deep_settings">Settings</string>
     <string name="menu_view_sms">View SMS</string>
-    <string name="menu_licence">License</string>
+    <string name="menu_agreement">Agreement</string>
     <string name="menu_about">About</string>
+    <string name="menu_authors">Authors</string>
     <string name="menu_close_all">Close</string>
 
     <!-- GPS IS OFF DIALOG -->
@@ -83,16 +90,46 @@
     <string name="first_launch_open_settings_negative_button">Ignore</string>
 
     <!-- SIM IS NOT AVAILABLE -->
+    <string name="phone_service_is_not_available_description">TELEPHONY_SERVICE unavailable.</string>
+    <string name="device_can_not_call_description">Your device can not send SMS or call.</string>
     <string name="sim_is_not_available_description">SIM card is not available.</string>
+    <string name="sim_operator_is_empty_description">SIM operator code is unavailable.</string>
+    <string name="airplane_mode_description">
+        Airplane Mode is ON.\n
+        Please, turn it OFF, only you could do so.\n
+        Otherwise we couldn\'t send emergency SMS to your chosen contacts.
+    </string>
     <string name="sim_is_not_available_positive_button">Exit</string>
 
     <!-- ABOUT DIALOG -->
     <string name="about_text">
-        Version: 1.0 \n
-        Yasonov Eugenii \n
-        Puzino Yury
+        This app uses accelerometer of your device to automatically detect if you have been
+        in a serious car crash or heavy hit and sends your location to your emergency contacts
+        after some time even if you can\'t. Time before SMS will be sent you can change in Settings \n
+        \n
+        Your emergency contacts will receive a SMS with time and location of the accident,
+        allowing them to call emergency services on your behalf and get help for you. \n
+        \n
+        Emergency services will dispatch help in record time thanks to your contacts call,
+        highly reducing rescue time and saving lives. \n
+        \n
+        It works on the background, trying to gain your gps location.
+        No need to open the app every time you get on your trip. \n
+        \n
+        [Please, report us every incorrect behaviour of this application]
     </string>
     <string name="about_positive_button">OK</string>
+
+    <!-- AUTHORS DIALOG -->
+    <string name="authors_text">
+        Version: $version \n
+        \n
+        Yasonov Eugenii (evyasonov@gmail.com) \n
+        \n
+        Puzino Yury (puzino.y.a@gmail.com)
+    </string>
+    <string name="authors_title"> </string>
+    <string name="authors_positive_button">OK</string>
 
     <!-- LICENCE DIALOG -->
     <string name="licence_accept_button">Accept</string>
@@ -110,7 +147,7 @@
 
 
     <!-- SETTINGS ACTIVITY -->
-    <string name="settings_activity_label">Settings - Emergency Caller</string>
+    <string name="settings_activity_label">Settings</string>
     <string name="settings_tab_1_text">MY INFO</string>
     <string name="settings_tab_2_text">PHONES</string>
     <string name="settings_tab_3_text">OTHER</string>
@@ -142,6 +179,7 @@
 
     <!-- DIALOGS -->
     <string name="dialog_one_button_positive_button">OK</string>
+    <string name="dialog_exit_title">Error: </string>
 
     <string name="device_has_no_accelerometer">Device has no accelerometer :(</string>
     <string name="device_has_no_accelerometer_exit">Exit</string>

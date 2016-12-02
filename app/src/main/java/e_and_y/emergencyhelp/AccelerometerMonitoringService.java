@@ -381,13 +381,14 @@ public class AccelerometerMonitoringService
             }
         }
 
-        String sLocationNotification = " Loc: ";
+        String sLocationNotification = ", Loc: ";
         Location location = mLocationListener.getLastLocation();
         if(location != null){
             sLocationNotification += location.getLatitude();
             sLocationNotification += ", ";
             sLocationNotification += location.getLongitude();
         }else{
+            icon = R.drawable.ic_stat_notify_warning;
             sLocationNotification += "Unknown :(";
         }
 
@@ -463,8 +464,6 @@ public class AccelerometerMonitoringService
         }
     };
 
-    private final MyLocationListener mLocationListener = new MyLocationListener();
-
 // TODO: Кнопка "Добавить" должна быть видна везде
 // TODO: в смс лишние цифры
 
@@ -503,9 +502,12 @@ public class AccelerometerMonitoringService
     };
     private final Messenger mMessenger = new Messenger(mHandler);
 
+    //set new LocationListener class
+    private final MyLocationListener mLocationListener = new MyLocationListener();
+
     private class MyLocationListener implements LocationListener {
-        private static final int SIGNIFICANT_TIME_IN_MILLIS = 1000 * 60 * 2;    //2 minutes
-        private static final int SIGNIFICANT_ACCURACY_IN_METERS = 10;
+        private static final int SIGNIFICANT_TIME_IN_MILLIS = 1000 * 60;    //1 minutes
+        private static final int SIGNIFICANT_ACCURACY_IN_METERS = 50;
 
         private Location mBestLocation = null;
 
@@ -516,6 +518,7 @@ public class AccelerometerMonitoringService
             if (isThisLocationBetter(location)) {
                 mBestLocation = location;
             }
+            setServiceIsRunningNotification();
         }
 
         @Override
@@ -533,6 +536,7 @@ public class AccelerometerMonitoringService
         @Override
         public void onStatusChanged(final String provider, final int status, final Bundle extras) {
             Log.d(LOG_TAG, "GPS STATUS");
+            setServiceIsRunningNotification();
         }
 
         public Location getLastLocation() {
@@ -549,7 +553,7 @@ public class AccelerometerMonitoringService
                 mBestLocation.setLatitude(0.0d);//coords of course
                 mBestLocation.setLongitude(0.0d);
                 mBestLocation.setTime(1479156000);  //2016-11-14T20:40:00
-                mBestLocation.setAccuracy(SIGNIFICANT_ACCURACY_IN_METERS);
+                mBestLocation.setAccuracy(SIGNIFICANT_ACCURACY_IN_METERS * 10); //10 times more than needed
             }
 
             //now checking is there some new location

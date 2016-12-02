@@ -3,7 +3,9 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <CheckBoxPreference
         android:key="bootload"
-        android:title="@string/settings_bootload"/>
+        android:title="@string/settings_bootload"
+        android:defaultValue="true"
+        />
 
         <EditTextPreference
             android:key="alarm_time"

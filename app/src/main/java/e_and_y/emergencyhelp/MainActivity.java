@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -22,8 +21,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.telephony.TelephonyManager;
 import android.text.Layout;
 import android.text.SpannableString;
+import android.text.method.LinkMovementMethod;
 import android.text.style.AlignmentSpan;
+import android.text.util.Linkify;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -32,27 +34,19 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.Arrays;
 import java.util.TreeSet;
-
-import static java.lang.String.valueOf;
 
 
 public class MainActivity extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
     public static final String SETTINGS_TAB = "e_and_y.emergencyhelp.SETTINGS_TAB";
-
     private static final String LOG_TAG = "e.y/MainActivity";
-
+    private static final int INITIAL_REQUEST_4LOCATION = 1337;
 
     private Switch mStatusSwitch;
     private SharedPreferences mSharedPreferences;
-
     private int mLastDialogNumber = 1;
-    private static final int INITIAL_REQUEST_4LOCATION = 1337;
-
     private Location mLocation = null;
 
     @Override
@@ -91,6 +85,12 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         Log.d(LOG_TAG, "onDestroy");
     }
 
+    @Override
+    public void onPause(){
+        super.onPause();
+        Log.d(LOG_TAG, "onPause");
+    }
+
     //Checking switch button of service off/on
     @Override
     public void onCheckedChanged(final CompoundButton compoundButton, final boolean isChecked) {
@@ -104,8 +104,46 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     }
 
 
+    private void setAccelServiceOff() {
+        Log.d(LOG_TAG, "setAccelServiceOff");
+
+        stopService(new Intent("e_and_y.emergencyhelp.AccelerometerMonitoringService"));
+    }
+
     private void setAccelServiceOn() {
         Log.d(LOG_TAG, "setAccelServiceOn");
+
+        if(mSharedPreferences.getString("user_name", "").isEmpty()){
+            new AlertDialog.Builder(this)
+                    .setMessage(getString(R.string.first_launch_open_settings_dialog_description))
+                    .setPositiveButton(
+                            getString(R.string.first_launch_open_settings_positive_button),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    startActivity(new Intent(getApplicationContext(), SettingsActivity.class));
+                                    dialogInterface.dismiss();
+                                }
+                            }
+                    )
+                    .setNegativeButton(
+                            getString(R.string.first_launch_open_settings_negative_button),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+
+                                    // SWITCH OFF
+                                    setAccelServiceOff();
+                                    dialogInterface.dismiss();
+                                }
+                            }
+                    )
+                    .create()
+                    .show();
+
+            mStatusSwitch.setChecked(false);
+            return;
+        }
 
         if (mSharedPreferences.getStringSet("emergency_contacts", new TreeSet<String>()).isEmpty()) {
 
@@ -179,12 +217,12 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 boolean bRes = myLocation.getLocation(this, locationResult);
 
                 if(mLocation != null){
-                    Toast.makeText(MainActivity.this, "_SUCCESS!_", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Location was found...", Toast.LENGTH_LONG).show();
                 }else{
-                    Toast.makeText(MainActivity.this, "_FAILED!_", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainActivity.this, "Location not found yet...", Toast.LENGTH_LONG).show();
                 }
 
-                checkLocationManagerAndShowDialog();
+                showDialogCheckLocationManager();
             }
 
         }
@@ -201,7 +239,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
                     // permission was granted, yay! Do the task you need to do.
                     Toast.makeText(this, "Permission was granted, thank you!.", Toast.LENGTH_SHORT).show();
-                    checkLocationManagerAndShowDialog();
+                    showDialogCheckLocationManager();
 
                 } else {
 
@@ -209,7 +247,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                     Toast.makeText(this, "Permission was not granted, aborting...", Toast.LENGTH_SHORT).show();
                     finish();
                 }
-                return;
+                //return;
             }
 
             // other 'case' lines to check for other
@@ -223,44 +261,6 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         startActivity(intent);
     }
 
-    private void checkLocationManagerAndShowDialog(){
-
-        final LocationManager locationManager =
-                (LocationManager) this.getSystemService(LOCATION_SERVICE);
-
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            new AlertDialog.Builder(this)
-                    .setMessage(getString(R.string.gps_off_dialog_description))
-                    .setPositiveButton(
-                            getString(R.string.gps_off_dialog_positive_button),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                                    dialogInterface.dismiss();
-                                }
-                            }
-                    )
-                    .setNegativeButton(
-                            getString(R.string.gps_off_dialog_negative_button),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.cancel();
-                                }
-                            }
-                    )
-                    .create()
-                    .show();
-        }
-
-    }
-
-    private void setAccelServiceOff() {
-        Log.d(LOG_TAG, "setAccelServiceOff");
-
-        stopService(new Intent("e_and_y.emergencyhelp.AccelerometerMonitoringService"));
-    }
 
 
     @Override
@@ -307,22 +307,36 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 );
                 break;
 
-            case R.id.action_menu_licence:
+            case R.id.action_menu_agreement:
                 showOneButtonDialog(
                         getString(R.string.licence_text),
-                        getString(R.string.license_positive_button)
+                        getString(R.string.licence_accept_button)
                 );
                 break;
-
+            //*/
             case R.id.action_menu_about:
+
                 showOneButtonDialog(
-                        getString(R.string.about_text),
-                        getString(R.string.about_positive_button)
+                    getString(R.string.about_text),
+                    getString(R.string.about_positive_button)
                 );
+                //*/
+            break;
+
+            case R.id.action_menu_authors:
+                /*
+                showOneButtonDialog(
+                    getString(R.string.about_text),
+                    getString(R.string.about_positive_button)
+                );
+                //*/
+
+                //mCustomDialog.createAuthorsDialog(this).show();
+                showOneButtonDialogAuthors(this);
                 break;
 
             case R.id.action_menu_close:
-                setAccelServiceOff();
+                //don't stop service here, because user can switch it off manually in MainActivity
                 finish();
                 break;
 
@@ -342,52 +356,8 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                         "emergency_contacts",
                         new TreeSet<String>(
                                 Arrays.asList(getString(R.string.emergency_number_default))))
+                .putBoolean("bootload", true)
                 .apply();
-    }
-
-    //changed to protected to be able to run everywhere here
-    public void showOneButtonDialog(final String text, final String positiveButtonText) {
-        showOneButtonDialog(this, text, positiveButtonText);
-    }
-
-
-    public static void showOneButtonDialog(final Activity activity, final String message, final String positiveButtonText) {
-        new AlertDialog.Builder(activity)
-                .setMessage(message)
-                .setPositiveButton(
-                        positiveButtonText,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                dialogInterface.dismiss();
-                            }
-                        }
-                )
-                .create()
-                .show();
-    }
-
-    public static void exitDialog(final Activity activity, final String message, final String exitButtonText) {
-        new AlertDialog.Builder(activity)
-                .setMessage(message)
-                .setPositiveButton(
-                        exitButtonText,
-                        new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialogInterface, int i) {
-                                activity.finish();
-                                dialogInterface.dismiss();
-                            }
-                        }
-                )
-                .setOnCancelListener(new DialogInterface.OnCancelListener() {
-                    @Override
-                    public void onCancel(DialogInterface dialogInterface) {
-                        activity.finish();
-                    }
-                })
-                .create()
-                .show();
     }
 
     //
@@ -397,7 +367,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                     (SensorManager) getApplicationContext().getSystemService(Context.SENSOR_SERVICE);
             final Sensor accelerometerSensor = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
             if (accelerometerSensor == null) {
-                exitDialog(
+                showExitDialog(
                         this,
                         getString(R.string.device_has_no_accelerometer),
                         getString(R.string.device_has_no_accelerometer_exit));
@@ -409,14 +379,56 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         if (mLastDialogNumber == 2) {
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
             //TODO: не дописано
-            if (false && telephonyManager.getSimState() != TelephonyManager.SIM_STATE_READY) {
-                exitDialog(
-                        this,
-                        getString(R.string.sim_is_not_available_description),
-                        getString(R.string.sim_is_not_available_positive_button));
-            } else {
-                mLastDialogNumber = 3;
+            if(telephonyManager == null){
+                //error, no TELEPHONY_SERVICE in this device
+                showExitDialog(this, getString(R.string.phone_service_is_not_available_description), getString(R.string.sim_is_not_available_positive_button));
+                return;
             }
+            //PHONE_TYPE_NONE - 0, GSM - 1, CDMA - 2, SIP - 3.
+            int nTelephoneType = telephonyManager.getPhoneType();
+
+            //@return the NETWORK_TYPE_xxxx for current data connection.
+            //NETWORK_TYPE_UNKNOWN ! doesn't mean network is none !
+            //Result may be unreliable on CDMA networks (TYPE 2)
+            //int nTelephoneNetworkType = telephonyManager.getNetworkType();
+            //@returns the numeric name (MCC+MNC) of current registered operator.
+            //String sTelephoneOperator = telephonyManager.getNetworkOperator();
+
+            if(nTelephoneType == TelephonyManager.PHONE_TYPE_NONE){
+                //error, can't call\send sms
+                showExitDialog(this, getString(R.string.device_can_not_call_description), getString(R.string.sim_is_not_available_positive_button));
+                return;
+            }
+
+            int nSimState = telephonyManager.getSimState();
+
+            if(nSimState != TelephonyManager.SIM_STATE_READY){
+                //error, something wrong with SIM card
+                showExitDialog(this, getString(R.string.sim_is_not_available_description), getString(R.string.sim_is_not_available_positive_button));
+                return;
+            }else{
+                String sSimOperator = telephonyManager.getSimOperator();
+                if(sSimOperator.isEmpty()){
+                    //SIM is ready, but no operator to connect
+                    showExitDialog(this, getString(R.string.sim_operator_is_empty_description), getString(R.string.sim_is_not_available_positive_button));
+                    return;
+                }
+            }
+
+            boolean bAirplaneMode = false;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.JELLY_BEAN_MR1){
+                /* API 17 and above */
+                bAirplaneMode = Settings.Global.getInt(this.getContentResolver(), Settings.Global.AIRPLANE_MODE_ON, 0) != 0;
+            } else {
+                /* below */
+                bAirplaneMode = Settings.System.getInt(this.getContentResolver(), Settings.System.AIRPLANE_MODE_ON, 0) != 0;
+            }
+            if(bAirplaneMode){
+                showExitDialog(this, getString(R.string.airplane_mode_description), getString(R.string.sim_is_not_available_positive_button));
+                return;
+            }
+
+            mLastDialogNumber = 3;
         }
 
         if (mLastDialogNumber == 3) {
@@ -490,6 +502,112 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         }
     }
 
+    //changed to protected to be able to run everywhere here
+    public void showOneButtonDialog(final String text, final String positiveButtonText) {
+        showOneButtonDialog(this, text, positiveButtonText);
+    }
+
+
+    public static void showOneButtonDialog(final Activity activity, final String message, final String positiveButtonText) {
+        new AlertDialog.Builder(activity)
+                .setMessage(message)
+                .setPositiveButton(
+                        positiveButtonText,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                dialogInterface.dismiss();
+                            }
+                        }
+                )
+                .create()
+                .show();
+    }
+
+    public static void showOneButtonDialogAuthors(final Context context) {
+        //working with strings of About dialog
+        String sMessage = context.getString(R.string.authors_text);
+        String sVersionName = BuildConfig.VERSION_NAME;
+        sMessage = sMessage.replace("$version", sVersionName);
+
+        final SpannableString sResult = new SpannableString(sMessage);
+
+        Linkify.addLinks(sResult, Linkify.EMAIL_ADDRESSES);
+
+        //creating view for AlertDialog
+        final TextView messageTmp = new TextView(context);
+        messageTmp.setText(sResult);
+        messageTmp.setTextSize(TypedValue.COMPLEX_UNIT_PT, 12);
+        messageTmp.setMovementMethod(LinkMovementMethod.getInstance());
+
+        new AlertDialog.Builder(context)
+                .setPositiveButton(R.string.authors_positive_button, null)
+                .setView(messageTmp)
+                .setTitle(R.string.authors_title)
+                .setCancelable(true)
+                //.setIcon(android.R.drawable.ic_dialog_info)
+                .create()
+                .show();
+    }
+
+    private void showDialogCheckLocationManager(){
+
+        final LocationManager locationManager =
+                (LocationManager) this.getSystemService(LOCATION_SERVICE);
+
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            new AlertDialog.Builder(this)
+                    .setMessage(getString(R.string.gps_off_dialog_description))
+                    .setPositiveButton(
+                            getString(R.string.gps_off_dialog_positive_button),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                    dialogInterface.dismiss();
+                                }
+                            }
+                    )
+                    .setNegativeButton(
+                            getString(R.string.gps_off_dialog_negative_button),
+                            new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialogInterface, int i) {
+                                    dialogInterface.cancel();
+                                }
+                            }
+                    )
+                    .create()
+                    .show();
+        }
+    }
+
+    public static void showExitDialog(final Activity activity, final String message, final String exitButtonText) {
+        new AlertDialog.Builder(activity)
+                .setMessage(message)
+                .setPositiveButton(
+                        exitButtonText,
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialogInterface, int i) {
+                                activity.finish();
+                                dialogInterface.dismiss();
+                            }
+                        }
+                )
+                .setOnCancelListener(new DialogInterface.OnCancelListener() {
+                    @Override
+                    public void onCancel(DialogInterface dialogInterface) {
+                        activity.finish();
+                    }
+                })
+                .setTitle(R.string.dialog_exit_title)
+                .setIcon(R.drawable.close_red)
+                .create()
+                .show();
+    }
+    //for ContentProvider, in progress 2016.12
+    /*
     public void onClickAddName(View view) {
         ContentValues values = new ContentValues();
         String sName1 = "YD key";//((EditText) findViewById(R.id.txtName)).getText().toString();
@@ -503,4 +621,5 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         Toast.makeText(getBaseContext(), "New record inserted", Toast.LENGTH_SHORT)
                 .show();
     }
+    //*/
 }

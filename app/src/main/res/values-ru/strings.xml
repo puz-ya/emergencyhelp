@@ -5,14 +5,15 @@
 
     <!-- SMS MESSAGE -->
     <string name="message_template">
-        Зафиксирован сильный удар ($time UTC). Возможно это автомобильная авария и мне ($name_sentence) нужна помощь.
+        Зафиксирован сильный удар ($time). Возможно $name_sentence нужна помощь.
         $addition_info_sentence $location_sentence
-        Это автоматическое сообщение.
+        Это автоматическое смс.
     </string>
-    <string name="name_sentence">Имя: $name</string>
+    <string name="name_sentence">Мне: $name</string>
     <string name="addition_info_sentence">Информация: $addition_info.</string>
     <string name="location_sentence">Координаты ($minutes_pass мин. назад): широта=$latitude, долгота=$longitude $accuracy_sentence.</string>
     <string name="accuracy_sentence">(точность $accuracy м.)</string>
+    <string name="location_error_sentence">Координаты: неизвестно.</string>
 
 
     <!-- SERVICE NOTIFICATION -->
@@ -28,7 +29,7 @@
 
 
     <!-- ALARM ACTIVITY -->
-    <string name="alarm_activity_label">ТРЕВОГА - Emergency Caller</string>
+    <string name="alarm_activity_label">ТРЕВОГА</string>
     <string name="alarm_screen_messages_sent">Сообщения были посланы</string>
     <string name="alarm_screen_button_while_alarm">ОТМЕНА ТРЕВОГИ</string>
     <string name="alarm_screen_button_after_alarm">ОК</string>
@@ -48,8 +49,9 @@
     <!-- MAIN ACTIVITY MENU -->
     <string name="menu_deep_settings">Настройки</string>
     <string name="menu_view_sms">Просмотреть SMS</string>
-    <string name="menu_licence">Условия использования</string>
+    <string name="menu_agreement">Соглашение</string>
     <string name="menu_about">О приложении</string>
+    <string name="menu_authors">Авторы</string>
     <string name="menu_close_all">Закрыть</string>
 
     <!-- GPS IS OFF DIALOG -->
@@ -70,8 +72,15 @@
     <string name="sim_is_not_available_positive_button">Выход</string>
 
     <!-- ABOUT DIALOG -->
-    <string name="about_text">Версия: 1.0</string>
-    <string name="about_positive_button">ОК</string>
+    <string name="authors_text">
+        Версия: $version \n
+        \n
+        Ясонов Евгений (evyasonov@gmail.com) \n
+        \n
+        Пузино Юрий (puzino.y.a@gmail.com)
+    </string>
+    <string name="authors_title"> </string>
+    <string name="authors_positive_button">ОК</string>
 
     <!-- LICENCE DIALOG -->
     <string name="licence_accept_button">Принять</string>
@@ -90,7 +99,7 @@
 
 
     <!-- SETTINGS ACTIVITY -->
-    <string name="settings_activity_label">Настройки - Emergency Caller</string>
+    <string name="settings_activity_label">Настройки</string>
     <string name="settings_tab_1_text">ОБО МНЕ</string>
     <string name="settings_tab_2_text">НОМЕРА</string>
     <string name="settings_tab_3_text">ДРУГОЕ</string>

@@ -22,8 +22,10 @@ import java.util.Locale;
         String tmpUserName = userName.equals("") ? "" : res.getString(R.string.name_sentence).replace("$name", userName);
         String tmpAdditionalInfo = userComment.equals("") ? "" : res.getString(R.string.addition_info_sentence).replace("$addition_info", userComment);
 
-        String locationMinutesPass, locationLatitude, locationLongitude,
-                locationAccuracy = "";  //needed to be initilized
+        String locationMinutesPass, locationLatitude, locationLongitude;
+        String locationAccuracy = "";  //needed to be initialized
+        String tmpLocation;
+
         if(location != null){
 
             //TODO: const 6e5 ? 600 000s ? 1ms == 0.001s
@@ -35,30 +37,36 @@ import java.util.Locale;
             if(location.hasAccuracy()){
                 locationAccuracy = res.getString(R.string.accuracy_sentence).replace("$accuracy", location.getAccuracy() + "");
             }
+            tmpLocation = res.getString(R.string.location_sentence)
+                    .replace("$minutes_pass", locationMinutesPass)
+                    .replace("$latitude", locationLatitude)
+                    .replace("$longitude", locationLongitude)
+                    .replace("$accuracy_sentence", locationAccuracy);
 
         }else{
+
+            /*
             locationMinutesPass = "?GPS?";
             locationLatitude = "?GPS?";
             locationLongitude = "?GPS?";
             locationAccuracy = res.getString(R.string.accuracy_sentence).replace("$accuracy", "???");
-        }
+            //*/
 
-        String tmpLocation = res.getString(R.string.location_sentence)
-                .replace("$minutes_pass", locationMinutesPass)
-                .replace("$latitude", locationLatitude)
-                .replace("$longitude", locationLongitude)
-                .replace("$accuracy_sentence", locationAccuracy)
-        ;
+            tmpLocation = res.getString(R.string.location_error_sentence);
+        }
 
         //get current time HH:MM:SS
         Date date = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss", Locale.US);
         String tmpTime = sdf.format(date);
 
-        return res.getString(R.string.message_template)
-                .replace( "$name_sentence", tmpUserName )
-                .replace( "$addition_info_sentence", tmpAdditionalInfo )
-                .replace( "$location_sentence", tmpLocation )
-                .replace( "$time", tmpTime );
+        //debug is better this way
+        String tmpResult = res.getString(R.string.message_template);
+        tmpResult = tmpResult.replace( "$name_sentence", tmpUserName );
+        tmpResult = tmpResult.replace( "$addition_info_sentence", tmpAdditionalInfo );
+        tmpResult = tmpResult.replace( "$location_sentence", tmpLocation );
+        tmpResult = tmpResult.replace( "$time", tmpTime );
+
+        return tmpResult;
     }
 }
