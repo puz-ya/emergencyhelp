@@ -20,16 +20,19 @@ public /* static */ class SettingsFragmentUserInfo
     final String[] mKeys = {"user_name", "user_comment"};
 
     Context mSettingsActivity = null;
+    private static final String LOG_TAG = "e.y/S...entUserInfo";
 
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.d(LOG_TAG, "onCreate");
         addPreferencesFromResource(R.xml.settings_screen_user_info);
     }
 
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        Log.d(LOG_TAG, "onActivityCreate");
 
         if(isAdded()){
             //Fragments are slightly unstable and getActivity returns null some times,

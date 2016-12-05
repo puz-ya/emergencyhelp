@@ -13,7 +13,6 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -107,7 +106,9 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     private void setAccelServiceOff() {
         Log.d(LOG_TAG, "setAccelServiceOff");
 
-        stopService(new Intent("e_and_y.emergencyhelp.AccelerometerMonitoringService"));
+        Intent accelService = new Intent("e_and_y.emergencyhelp.AccelerometerMonitoringService");
+        accelService.setPackage("e_and_y.emergencyhelp");   //need to set package from security risk
+        stopService(accelService);
     }
 
     private void setAccelServiceOn() {

@@ -2,7 +2,7 @@ package e_and_y.emergencyhelp;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Fragment;
+import android.support.v4.app.Fragment;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -69,6 +69,7 @@ public class SettingsFragmentPhones
         }
     }
 
+    //1 first one
     @Override
     public void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,6 +82,7 @@ public class SettingsFragmentPhones
                         Context.MODE_MULTI_PROCESS);
     }
 
+    //2 second one
     @Override
     public View onCreateView(
             final LayoutInflater inflater,
@@ -95,11 +97,10 @@ public class SettingsFragmentPhones
             final ListView mContactsListView = (ListView) mFragmentView.findViewById(R.id.contactList);
             mContactsListView.setOnItemClickListener(this);
 
-            final View headerView = ((LayoutInflater) getActivity()
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE))
-                    .inflate(R.layout.header_in_fragment_phones_settings, null, false);
+            LayoutInflater inflaterHeader = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            final View headerView = inflaterHeader.inflate(R.layout.header_in_fragment_phones_settings, null, false);
 
-            headerView.findViewById(R.id.add_phone_button).setOnClickListener(this);
+            headerView.findViewById(R.id.add_phone_button).setOnClickListener(this);    //TODO: crash sometimes
 
             mAddPhoneTextView = (AutoCompleteTextView) headerView.findViewById(R.id.new_phone_number);
             mAddPhoneTextView.setAdapter(new ArrayAdapter<String>(
@@ -122,6 +123,14 @@ public class SettingsFragmentPhones
 //            TODO: Autocomplete сделать как-то поумнее, по подстрокам искать или как-то изменить вывод номера
         }
         return mFragmentView;
+    }
+
+    //3 third one
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        Log.d(LOG_TAG, "onActivityCreate");
+
     }
 
     @Override

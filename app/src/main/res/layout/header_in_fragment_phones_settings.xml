@@ -1,5 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
-
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
@@ -29,6 +27,8 @@
         android:layout_alignTop="@+id/new_phone_number"
         android:layout_alignBottom="@+id/new_phone_number"
         android:layout_alignRight="@+id/new_phone_number"
-        android:src="@drawable/ic_add_participant" />
+        android:src="@drawable/ic_add_participant"
+        android:contentDescription="@string/settings_add_button_text"
+        />
 
 </RelativeLayout>

@@ -1,15 +1,17 @@
 apply plugin: 'com.android.application'
+//apply plugin: 'com.google.gms.google-services'
+
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "24.0.2"  //20.0.0 - init, 22.0.1 - next
+    compileSdkVersion 25
+    buildToolsVersion "25.0.1"  //20.0.0 - init, 22.0.1, 24.0.2, 25.0.1
 
     defaultConfig {
         applicationId "e_and_y.emergencyhelp"
         minSdkVersion 16
         targetSdkVersion 16
         versionCode 1
-        versionName "1.0"
+        versionName "0.9"
     }
     buildTypes {
         release {
@@ -22,9 +24,16 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:24.2.0' //v7:19.+
+    compile 'com.android.support:appcompat-v7:25.0.1' //v7:19.+, 24.2.0
     // You must install or update the Support Repository through the SDK manager to use this dependency.
-    compile 'com.android.support:support-v4:24.2.0' //v7:19.+
+    compile 'com.android.support:support-v4:25.0.1' //v7:19.+, 24.2.0
+
+    //Firebase
+    //compile 'com.google.firebase:firebase-core:10.0.1'
+    //compile 'com.google.firebase:firebase-crash:10.0.1'
+    //compile 'com.google.firebase:firebase-ads:10.0.1'
+    //compile 'com.google.firebase:firebase-appindexing:10.0.1'
+
 
     //    compile 'com.android.support:support-v4:24.2.0'
     //    compile 'com.android.support:appcompat-v7:24.2.0'

@@ -393,6 +393,8 @@ public class AccelerometerMonitoringService
         }
 
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+        //API 20+ with Material Design set background and colors to WHITE FUCK, choose wisely
+        //TODO: icon API 20+
         builder.setSmallIcon(icon);
         builder.setContentTitle(getString(R.string.notification_title));
         builder.setContentText(getString(R.string.notification_description).replace("$GPS", gpsText + sLocationNotification));

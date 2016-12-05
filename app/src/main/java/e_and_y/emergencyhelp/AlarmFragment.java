@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,7 +21,6 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 
 
@@ -203,7 +201,7 @@ public class AlarmFragment
             //mMediaPlayer.start(); //must be commented, in onCreate we already assigned setOnPreparedListener
 
             mBackgroundChangeTask = new ChangeBackgroundTask();
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
                 mBackgroundChangeTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
             } else {
                 mBackgroundChangeTask.execute();
