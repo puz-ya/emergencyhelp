@@ -1,5 +1,5 @@
 apply plugin: 'com.android.application'
-//apply plugin: 'com.google.gms.google-services'
+apply plugin: 'com.google.gms.google-services'
 
 
 android {
@@ -15,9 +15,8 @@ android {
     }
     buildTypes {
         release {
-            // runProguard false
-            // minifyEnabled true
-            // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+             minifyEnabled true
+             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
 }
@@ -29,12 +28,9 @@ dependencies {
     compile 'com.android.support:support-v4:25.0.1' //v7:19.+, 24.2.0
 
     //Firebase
-    //compile 'com.google.firebase:firebase-core:10.0.1'
-    //compile 'com.google.firebase:firebase-crash:10.0.1'
-    //compile 'com.google.firebase:firebase-ads:10.0.1'
-    //compile 'com.google.firebase:firebase-appindexing:10.0.1'
+    compile 'com.google.firebase:firebase-core:10.0.1'
+    compile 'com.google.firebase:firebase-crash:10.0.1'
+    compile 'com.google.firebase:firebase-ads:10.0.1'
+    compile 'com.google.firebase:firebase-appindexing:10.0.1'
 
-
-    //    compile 'com.android.support:support-v4:24.2.0'
-    //    compile 'com.android.support:appcompat-v7:24.2.0'
 }

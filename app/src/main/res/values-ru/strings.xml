@@ -68,10 +68,39 @@
     <string name="first_launch_open_settings_negative_button">Игнорировать</string>
 
     <!-- SIM IS NOT AVAILABLE -->
+    <string name="phone_service_is_not_available_description">TELEPHONY_SERVICE недоступен.</string>
+    <string name="device_can_not_call_description">Устройство не может отправлять СМС.</string>
     <string name="sim_is_not_available_description">SIM-карта недоступна.</string>
+    <string name="sim_operator_is_empty_description">SIM код оператора недоступен.</string>
+    <string name="airplane_mode_description">
+        Режим Полёта ВКЛ.\n
+        Пожалуйста, выключите его, только вы можете это сделать.\n
+        Иначе приложение не сможет отправить аварийное СМС для избранных контактов.
+    </string>
     <string name="sim_is_not_available_positive_button">Выход</string>
 
     <!-- ABOUT DIALOG -->
+    <string name="about_text">
+        Данное приложение использует акселерометр для автоматического определения момента
+        серьёзной аварии или резкого удара и посылает ваше местоположение избранным контактам
+        по истечении некоторого времени, сигнализируя и мигая экраном.
+        Время до отправки СМС вы можете указать в Настройках. \n
+        \n
+        Ваши избранные контакты получат СМС с временем и местоположением (по возможности),
+        что позволит им вызвать спасательную службу для вас и помочь вам. \n
+        \n
+        Спасательная служба окажет помощь намного быстрее, благодаря звонку от ваших контактов,
+        тем самым уменьшая время для вашего спасения. \n
+        \n
+        Сервис работает в фоне, пытаясь определить вашие местоположение.
+        Нет нужды открывать приложение каждый раз, отправляясь в поездку.
+        В приложении имеется возможность автозагрузки при включении телефона. \n
+        \n
+        [Пожалуйста, сообщайте обо всех некорректных поведениях приложения]
+    </string>
+    <string name="about_positive_button">ОК</string>
+
+    <!-- AUTHORS DIALOG -->
     <string name="authors_text">
         Версия: $version \n
         \n
@@ -139,5 +168,7 @@
     <string name="main_activity_alarm">Включить Тревогу!</string>
 
     <string name="settings_close">Закрыть Настройки</string>
+    <string name="dialog_exit_title">Ошибка:</string>
+
 
 </resources>

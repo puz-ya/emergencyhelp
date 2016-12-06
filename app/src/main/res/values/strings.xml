@@ -2,15 +2,7 @@
 <resources>
 
     <!-- APP NAME must be 10 letters MAX -->
-    <string name="app_name">Emergency Caller</string>
-    <string name="app_name2">SaveMeNow</string>
-    <string name="app_name3">Save Me Now</string>
-
-    <string name="app_name4">CoverMyTrip</string>
-    <string name="app_name6">Cover My Trip</string>
-
-    <string name="app_name5">Safe Trip</string>
-
+    <string name="app_name">Safe Trip</string>
 
     <!-- SMS MESSAGE -->
     <string name="message_template">
@@ -49,14 +41,7 @@
 
 
     <!-- MAIN ACTIVITY -->
-    <string name="main_activity_label">Emergency Caller</string>
-    <string name="main_activity_label2">SaveMeNow</string>
-    <string name="main_activity_label3">Save Me Now</string>
-
-    <string name="main_activity_label4">CoverMyTrip</string>
-    <string name="main_activity_label44">Cover My Trip</string>
-
-    <string name="main_activity_label5">Safe Trip</string>
+    <string name="main_activity_label">Safe Trip</string>
 
     <string name="main_activity_status">Service status:</string>
     <string name="main_activity_description">
@@ -105,9 +90,9 @@
     <string name="about_text">
         This app uses accelerometer of your device to automatically detect if you have been
         in a serious car crash or heavy hit and sends your location to your emergency contacts
-        after some time even if you can\'t. Time before SMS will be sent you can change in Settings \n
+        after some time even if you can\'t. Time before SMS will be sent you can change in Settings. \n
         \n
-        Your emergency contacts will receive a SMS with time and location of the accident,
+        Your emergency contacts will receive a SMS with time and location (if possible) of the accident,
         allowing them to call emergency services on your behalf and get help for you. \n
         \n
         Emergency services will dispatch help in record time thanks to your contacts call,

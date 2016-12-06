@@ -52,7 +52,7 @@ public class AlarmFragment
 
     private int mCurrentMode = MODE_PRE_ALARM;
 
-    /*
+
     @Override
     public void onAttach(final Activity activity) {
         super.onAttach(activity);
@@ -65,7 +65,7 @@ public class AlarmFragment
         }
 
         releaseActivityWindow();
-    } */
+    } //*/
 
     @Override
     public void onAttach(final Context context){

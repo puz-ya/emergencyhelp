@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "814697784825",
+    "firebase_url": "https://emergencycaller-41ce4.firebaseio.com",
+    "project_id": "emergencycaller-41ce4",
+    "storage_bucket": "emergencycaller-41ce4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:814697784825:android:2a10e33ee49978e5",
+        "android_client_info": {
+          "package_name": "e_and_y.emergencyhelp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "814697784825-5bijo5i50on4mn40uauisc26mjpuea8b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxWFPNfBhJmsBFzUJgZbVThD89fDvrMro"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
