@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Emergency Caller</string>
+    <string name="app_name">Safe Trip</string>
 
     <!-- SMS MESSAGE -->
     <string name="message_template">
@@ -17,7 +17,7 @@
 
 
     <!-- SERVICE NOTIFICATION -->
-    <string name="notification_title">Emergency Caller</string>
+    <string name="notification_title">Safe Trip</string>
     <string name="notification_gps_off">GPS ВЫКЛ</string>
     <string name="notification_gps_on">GPS ВКЛ</string>
     <string name="notification_network_off">СЕТЬ ВЫКЛ</string>
@@ -33,11 +33,14 @@
     <string name="alarm_screen_messages_sent">Сообщения были посланы</string>
     <string name="alarm_screen_button_while_alarm">ОТМЕНА ТРЕВОГИ</string>
     <string name="alarm_screen_button_after_alarm">ОК</string>
-    <string name="alarm_screen_description">Слежение ВЫКЛ. Сообщения были посланы.</string>
+    <string name="alarm_screen_description">
+        Сервис ВЫКЛ.\n
+        После завершения отсчёта сообщения будут отправлены.
+    </string>
 
 
     <!-- MAIN ACTIVITY -->
-    <string name="main_activity_label">Emergency Caller</string>
+    <string name="main_activity_label">Safe Trip</string>
     <string name="main_activity_status">Статус сервиса:</string>
     <string name="main_activity_description">
         В случае аварии это приложение включит сигнал тревоги и через некоторое время автоматически отправит

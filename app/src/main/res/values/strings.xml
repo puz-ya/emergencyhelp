@@ -18,7 +18,7 @@
 
 
     <!-- SERVICE NOTIFICATION -->
-    <string name="notification_title">Emergency Caller</string>
+    <string name="notification_title">Safe Trip</string>
     <string name="notification_gps_off">GPS OFF</string>
     <string name="notification_gps_on">GPS ON</string>
     <string name="notification_network_on">NETWORK ON</string>

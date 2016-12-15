@@ -31,6 +31,7 @@ import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -337,9 +338,9 @@ public class AccelerometerMonitoringService
                 .getSharedPreferences(SettingsActivity.PREFERENCES_FILENAME, MODE_MULTI_PROCESS);
 
         //must check for input values
-        String sAlarmSensitive = sharedPreferences.getString("alarm_sensitive", "4");
+        String sAlarmSensitive = sharedPreferences.getString("alarm_sensitive", "3");
         if(sAlarmSensitive.contains(".") || sAlarmSensitive.contains(",") || sAlarmSensitive.contains("-")){
-            sAlarmSensitive = "4";
+            sAlarmSensitive = "3";
         }
         mSensorThreshold = 9.81 * Integer.parseInt(sAlarmSensitive);
 
@@ -398,6 +399,23 @@ public class AccelerometerMonitoringService
         builder.setSmallIcon(icon);
         builder.setContentTitle(getString(R.string.notification_title));
         builder.setContentText(getString(R.string.notification_description).replace("$GPS", gpsText + sLocationNotification));
+
+        //notification is an object of class android.app.Notification
+        try {
+            Class miuiNotificationClass = Class.forName("android.app.MiuiNotification");
+            Object miuiNotification = miuiNotificationClass.newInstance();
+            Field field = miuiNotification.getClass().getDeclaredField("customizedIcon");
+            field.setAccessible(true);
+
+            field.set(miuiNotification, true);
+            field = builder.getClass().getField("extraNotification");
+            field.setAccessible(true);
+
+            field.set(builder, miuiNotification);
+        } catch (Exception e) {
+            Log.d(LOG_TAG, "miuiException" + e.getMessage());
+        }
+
 
         Log.d(LOG_TAG, "notificationIntent");
 

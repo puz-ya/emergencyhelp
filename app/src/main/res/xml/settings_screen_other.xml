@@ -14,11 +14,11 @@
             android:selectAllOnFocus="true"
             android:inputType="numberSigned" />
 
-        <!-- defaultValue==5 norm to throw on the pillow -->
+        <!-- defaultValue==3 or 5 - are norm to throw on the pillow -->
         <EditTextPreference
             android:key="alarm_sensitive"
             android:title="@string/settings_sensor_sensitivity"
-            android:defaultValue="5"
+            android:defaultValue="3"
             android:selectAllOnFocus="true"
             android:inputType="numberSigned" />
 </PreferenceScreen>
