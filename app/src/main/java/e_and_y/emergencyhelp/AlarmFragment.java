@@ -217,17 +217,26 @@ public class AlarmFragment
     }
 
     @Override
+    public void onPause(){
+        Log.d(LOG_TAG, "onPause");
+
+        super.onPause();
+        //onDestroy();    //if we switching to background (Home button or smth else like incomming call), we stop
+        releaseAlarmObjects();
+    }
+
+    @Override
     public void onDetach() {
-        super.onDetach();
         Log.d(LOG_TAG, "onDetach");
+        super.onDetach();
 
         mActivity = null;
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
         Log.d(LOG_TAG, "onDestroy");
+        super.onDestroy();
 
         releaseAlarmObjects();
         mService.unbindService();
@@ -269,6 +278,7 @@ public class AlarmFragment
             mVibrator.cancel();
         }
 
+        mMediaPlayer.reset();
         mMediaPlayer.release();
 
         if (mBackgroundChangeTask != null) {

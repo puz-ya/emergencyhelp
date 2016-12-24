@@ -139,6 +139,9 @@
 
     <string name="settings_invalid_number">Number isn\'t valid</string>
     <string name="settings_repeating_number">This number already added</string>
+    <string name="settings_number_count">No more allowed numbers in Free version</string>
+
+    <string name="settings_free_version_restriction">In free version no more 2 contacts allowed!</string>
 
     <string name="settings_confirm_deleting_number_text">Delete?</string>
     <string name="settings_confirm_deleting_number_positive_button">Delete</string>

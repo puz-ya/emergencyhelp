@@ -191,26 +191,49 @@ public class SettingsFragmentPhones
         final String number = getStripedPhoneNumberFromContact(contact);
 
         if (PhoneNumberUtils.isWellFormedSmsAddress(number)) {
-            if ( ! mEmergencyPhoneNumbers.contains(number)) {
-                mEmergencyContacts.add(contact);
-                mEmergencyPhoneNumbers.add(number);
+            if ( !mEmergencyPhoneNumbers.contains(number)) {
 
-                saveEmergencyContactsInPreferences();
+                //for free version
+                if(mEmergencyPhoneNumbers.size() < 2){
 
-                mAddPhoneTextView.setText("");
-                mEmergencyContactsAdapter.notifyDataSetChanged();
+                    mEmergencyContacts.add(contact);
+                    mEmergencyPhoneNumbers.add(number);
+
+                    saveEmergencyContactsInPreferences();
+
+                    mAddPhoneTextView.setText("");
+                    mEmergencyContactsAdapter.notifyDataSetChanged();
+                }else {
+                    showOKButtonDialog(R.string.settings_number_count);
+                    /*MainActivity.showOneButtonDialog(
+                            getActivity(),
+                            getString(R.string.settings_number_count),
+                            getString(R.string.dialog_one_button_positive_button));
+                    */
+                }
             } else {
-                MainActivity.showOneButtonDialog(
+                showOKButtonDialog(R.string.settings_repeating_number);
+                /*MainActivity.showOneButtonDialog(
                         getActivity(),
                         getString(R.string.settings_repeating_number),
                         getString(R.string.dialog_one_button_positive_button));
+                */
             }
         } else {
-            MainActivity.showOneButtonDialog(
+            showOKButtonDialog(R.string.settings_invalid_number);
+            /*MainActivity.showOneButtonDialog(
                     getActivity(),
                     getString(R.string.settings_invalid_number),
                     getString(R.string.dialog_one_button_positive_button));
+                    */
         }
+    }
+
+    public void showOKButtonDialog(int rInt){
+        MainActivity.showOneButtonDialog(
+                getActivity(),
+                getString(rInt),
+                getString(R.string.dialog_one_button_positive_button));
     }
 
     private void deleteContactOnPosition(final int position) {

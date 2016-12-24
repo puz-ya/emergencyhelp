@@ -138,6 +138,9 @@
 
     <string name="settings_invalid_number">Неверный формат номера</string>
     <string name="settings_repeating_number">Этот номер уже добавлен</string>
+    <string name="settings_number_count">Нельзя добавить больше номеров в Бесплатной версии</string>
+
+    <string name="settings_free_version_restriction">В бесплатной версии можно указать не более 2 контактов!</string>
 
     <string name="settings_confirm_deleting_number_text">Удалить?</string>
     <string name="settings_confirm_deleting_number_positive_button">Удалить</string>

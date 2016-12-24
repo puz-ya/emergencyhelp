@@ -73,12 +73,22 @@
                     <LinearLayout
                         android:id="@+id/tab2"
                         android:layout_width="fill_parent"
-                        android:layout_height="fill_parent">
+                        android:layout_height="fill_parent"
+                        android:orientation="vertical"
+                        >
 
                         <fragment android:name="e_and_y.emergencyhelp.SettingsFragmentPhones"
                                   android:id="@+id/phones_settings_fragment"
                                   android:layout_width="wrap_content"
                                   android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/settings_free_version_restriction"
+                            android:gravity="center"
+                            android:layout_marginTop="20dp"
+                            />
 
                     </LinearLayout>
 
