@@ -3,14 +3,14 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.1"  //20.0.0 - init, 22.0.1, 24.0.2, 25.0.1
+    buildToolsVersion "25.0.2"  //20.0.0 - init, 22.0.1, 24.0.2, 25.0.1
 
     defaultConfig {
         applicationId "e_and_y.emergencyhelp"
         minSdkVersion 16
         targetSdkVersion 16
-        versionCode 2
-        versionName "0.91"
+        versionCode 4
+        versionName "1.0"
         //don't forget to increase DATABASE_VERSION
     }
     buildTypes {
@@ -23,15 +23,15 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    compile 'com.android.support:appcompat-v7:25.0.1' //v7:19.+, 24.2.0
+    compile 'com.android.support:appcompat-v7:25.1.0' //v7:19.+, 24.2.0
     // You must install or update the Support Repository through the SDK manager to use this dependency.
-    compile 'com.android.support:support-v4:25.0.1' //v7:19.+, 24.2.0
+    compile 'com.android.support:support-v4:25.1.0' //v7:19.+, 24.2.0
 
     //Firebase
     compile 'com.google.firebase:firebase-core:10.0.1'
     compile 'com.google.firebase:firebase-crash:10.0.1'
-    compile 'com.google.firebase:firebase-ads:10.0.1'
     compile 'com.google.firebase:firebase-appindexing:10.0.1'
+    //compile 'com.google.firebase:firebase-ads:10.0.1' AdMob, advertisments
 
 }
 

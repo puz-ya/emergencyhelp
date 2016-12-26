@@ -12,8 +12,8 @@
     </string>
     <string name="name_sentence">I: $name</string>
     <string name="addition_info_sentence">Info: $addition_info.</string>
-    <string name="location_sentence">Coordinates ($minutes_pass min. ago): latitude=$latitude, longitude=$longitude, $accuracy_sentence.</string>
-    <string name="accuracy_sentence">(accuracy $accuracy m.)</string>
+    <string name="location_sentence">Coord. ($minutes_pass min. ago): lat.=$latitude, long.=$longitude, $accuracy_sentence.</string>
+    <string name="accuracy_sentence">(accur. $accuracy m.)</string>
     <string name="location_error_sentence">Location: unknown.</string>
 
 

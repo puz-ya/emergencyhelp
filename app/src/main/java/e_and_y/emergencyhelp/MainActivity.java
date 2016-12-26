@@ -282,6 +282,21 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
         return true;
     }
 
+    public void showSMSText(View view){
+        final LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
+
+        final String message = AccelerometerMonitoringServiceSmsGenerator.generate(
+                getApplicationContext(),
+                mSharedPreferences.getString("user_name", ""),
+                mSharedPreferences.getString("user_comment", ""),
+                locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
+
+        showOneButtonDialog(
+                getString(R.string.sms_pretext) + "\n" + message,
+                getString(R.string.sms_positive_button)
+        );
+    }
+
     @Override
     public boolean onOptionsItemSelected(final MenuItem item) {
         final int id = item.getItemId();
@@ -294,18 +309,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 break;
 
             case R.id.action_menu_view_sms:
-                final LocationManager locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
-                final String message = AccelerometerMonitoringServiceSmsGenerator.generate(
-                        getApplicationContext(),
-                        mSharedPreferences.getString("user_name", ""),
-                        mSharedPreferences.getString("user_comment", ""),
-                        locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER));
-
-                showOneButtonDialog(
-                        getString(R.string.sms_pretext) + "\n" + message,
-                        getString(R.string.sms_positive_button)
-                );
+                showSMSText(null);  //no View needed
                 break;
 
             case R.id.action_menu_agreement:
@@ -314,25 +318,15 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                         getString(R.string.licence_accept_button)
                 );
                 break;
-            //*/
-            case R.id.action_menu_about:
 
+            case R.id.action_menu_about:
                 showOneButtonDialog(
                     getString(R.string.about_text),
                     getString(R.string.about_positive_button)
                 );
-                //*/
-            break;
+                break;
 
             case R.id.action_menu_authors:
-                /*
-                showOneButtonDialog(
-                    getString(R.string.about_text),
-                    getString(R.string.about_positive_button)
-                );
-                //*/
-
-                //mCustomDialog.createAuthorsDialog(this).show();
                 showOneButtonDialogAuthors(this);
                 break;
 
@@ -379,7 +373,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
         if (mLastDialogNumber == 2) {
             TelephonyManager telephonyManager = (TelephonyManager) getSystemService(Context.TELEPHONY_SERVICE);
-            //TODO: не дописано
+
             if(telephonyManager == null){
                 //error, no TELEPHONY_SERVICE in this device
                 showExitDialog(this, getString(R.string.phone_service_is_not_available_description), getString(R.string.sim_is_not_available_positive_button));

@@ -10,9 +10,9 @@
         Это автоматическое смс.
     </string>
     <string name="name_sentence">Мне: $name</string>
-    <string name="addition_info_sentence">Информация: $addition_info.</string>
-    <string name="location_sentence">Координаты ($minutes_pass мин. назад): широта=$latitude, долгота=$longitude $accuracy_sentence.</string>
-    <string name="accuracy_sentence">(точность $accuracy м.)</string>
+    <string name="addition_info_sentence">Инфо: $addition_info.</string>
+    <string name="location_sentence">Коорд. ($minutes_pass мин. назад): шир.=$latitude, долг.=$longitude $accuracy_sentence.</string>
+    <string name="accuracy_sentence">(точн. $accuracy м.)</string>
     <string name="location_error_sentence">Координаты: неизвестно.</string>
 
 

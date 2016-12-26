@@ -42,7 +42,7 @@ public class SettingsContentProvider extends ContentProvider {
     //SQLLite will have 2 tables: for settings and for phone numbers (to send sms)
     protected SQLiteDatabase mDb;
     static final String DATABASE_NAME = "e.y_database";
-    static final int DATABASE_VERSION = 2;
+    static final int DATABASE_VERSION = 4;
 
     static final String TABLE_SETTINGS = "all_settings";
     static final String TABLE_PHONES = "all_phones";
@@ -54,7 +54,7 @@ public class SettingsContentProvider extends ContentProvider {
             + " ('user_comment', '...'),"
             + " ('bootload', 'false'),"
             + " ('alarm_time', '30'),"
-            + " ('alarm_sensitive', '3');";    //TODO: sql
+            + " ('alarm_sensitive', '3');";
 
     static final String CREATE_DB_TABLE_PHONES = "CREATE TABLE " + TABLE_PHONES
             + " (id INTEGER PRIMARY KEY AUTOINCREMENT, "

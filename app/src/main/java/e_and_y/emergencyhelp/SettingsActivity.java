@@ -76,16 +76,16 @@ public class SettingsActivity
 
     @Override
     protected void onResume() {
-        super.onResume();
         Log.d(LOG_TAG, "onResume");
+        super.onResume();
 
         mService.bindService();
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
         Log.d(LOG_TAG, "onDestroy");
+        super.onDestroy();
 
         mService.unbindService();
     }
@@ -168,6 +168,15 @@ public class SettingsActivity
     @Override
     public void onLoaderReset(Loader<Cursor> arg0){
         //auto-generated
+    }
+
+    //Because we decided not to let users kill an app from Android App List
+    @Override
+    public void onBackPressed(){
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(intent);
+        finish();
     }
 
 }

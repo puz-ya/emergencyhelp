@@ -117,6 +117,7 @@ public class AlarmFragment
         AudioManager audioManager = (AudioManager) mContext.getSystemService(Context.AUDIO_SERVICE);
         audioManager.setRingerMode(AudioManager.RINGER_MODE_NORMAL);
 
+        //set MAX volume
         int alarmType = AudioManager.STREAM_ALARM;
         audioManager.setStreamVolume(
                 alarmType,
@@ -150,9 +151,6 @@ public class AlarmFragment
             Log.d(LOG_TAG, "SecurityException: ", ex);
             // fall through
         }
-
-        // TODO: Handle exception (if audio can't be loaded
-        // TODO: check if mMediaManager is null
 
     }
 
@@ -220,9 +218,9 @@ public class AlarmFragment
     public void onPause(){
         Log.d(LOG_TAG, "onPause");
 
-        super.onPause();
         //onDestroy();    //if we switching to background (Home button or smth else like incomming call), we stop
         releaseAlarmObjects();
+        super.onPause();
     }
 
     @Override
@@ -245,13 +243,15 @@ public class AlarmFragment
 
     @Override
     public void onClick(final View view) {
+        Log.d(LOG_TAG, "onClick");
         // This method will be also called when the back button pressed
         stopAlarmByUser();
-        getActivity().finish();
+        mActivity.finish();
     }
 
 
     private void stopAlarmByUser() {
+        Log.d(LOG_TAG, "stopAlarmByUser");
         mCurrentMode = MODE_POST_ALARM;
         releaseAlarmObjects();
 
@@ -259,6 +259,7 @@ public class AlarmFragment
     }
 
     private void stopAlarmByTimeout() {
+        Log.d(LOG_TAG, "stopAlarmByTimeOut");
         mCurrentMode = MODE_POST_ALARM;
         releaseAlarmObjects();
 
@@ -278,8 +279,11 @@ public class AlarmFragment
             mVibrator.cancel();
         }
 
-        mMediaPlayer.reset();
-        mMediaPlayer.release();
+        if(mMediaPlayer!=null){
+            mMediaPlayer.reset();
+            mMediaPlayer.release();
+            mMediaPlayer = null;
+        }
 
         if (mBackgroundChangeTask != null) {
             mBackgroundChangeTask.cancel(true);

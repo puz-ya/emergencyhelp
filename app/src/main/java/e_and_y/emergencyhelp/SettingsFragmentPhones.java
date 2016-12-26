@@ -100,7 +100,7 @@ public class SettingsFragmentPhones
             LayoutInflater inflaterHeader = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             final View headerView = inflaterHeader.inflate(R.layout.header_in_fragment_phones_settings, null, false);
 
-            headerView.findViewById(R.id.add_phone_button).setOnClickListener(this);    //TODO: crash sometimes
+            headerView.findViewById(R.id.add_phone_button).setOnClickListener(this);
 
             mAddPhoneTextView = (AutoCompleteTextView) headerView.findViewById(R.id.new_phone_number);
             mAddPhoneTextView.setAdapter(new ArrayAdapter<String>(

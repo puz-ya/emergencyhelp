@@ -32,10 +32,19 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/menu_view_sms"
+        android:onClick="showSMSText"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/main_activity_alarm"
         android:onClick="onClickStartAlarm"
         android:layout_gravity="center_horizontal"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="48dp"
         />
 
     <!-- Content provide SQLite testing

@@ -8,6 +8,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -396,11 +398,16 @@ public class AccelerometerMonitoringService
         final NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         //API 20+ with Material Design set background and colors to WHITE FUCK, choose wisely
         //TODO: icon API 20+
-        builder.setSmallIcon(icon);
+        builder.setSmallIcon(icon); //in Status Bar small icon
+        Bitmap largeNotifyIcon = BitmapFactory.decodeResource(getResources(), R.drawable.ic_stat_notify_ok);
+        builder.setLargeIcon(largeNotifyIcon); //after user pull down notification show LARGE one
+
         builder.setContentTitle(getString(R.string.notification_title));
         builder.setContentText(getString(R.string.notification_description).replace("$GPS", gpsText + sLocationNotification));
 
+        //Chinese XIAOMI FUCK, they changed icons in status bar to app-icon (NOT notifications!)
         //notification is an object of class android.app.Notification
+        /*
         try {
             Class miuiNotificationClass = Class.forName("android.app.MiuiNotification");
             Object miuiNotification = miuiNotificationClass.newInstance();
@@ -415,7 +422,7 @@ public class AccelerometerMonitoringService
         } catch (Exception e) {
             Log.d(LOG_TAG, "miuiException" + e.getMessage());
         }
-
+        //*/
 
         Log.d(LOG_TAG, "notificationIntent");
 
@@ -424,8 +431,7 @@ public class AccelerometerMonitoringService
         if(Build.VERSION.SDK_INT >= 16){     //The flag we used here was only added at API 16
             notificationIntent.setFlags(Intent.FLAG_RECEIVER_FOREGROUND);
         }
-        final PendingIntent notificationClickIntent =
-                PendingIntent.getActivity(this, 1, notificationIntent, 0);
+        final PendingIntent notificationClickIntent = PendingIntent.getActivity(this, 1, notificationIntent, 0);
         builder.setContentIntent(notificationClickIntent);
 
         Log.d(LOG_TAG, "startForeground");
@@ -484,7 +490,6 @@ public class AccelerometerMonitoringService
         }
     };
 
-// TODO: Кнопка "Добавить" должна быть видна везде
 // TODO: в смс лишние цифры
 
     /**
