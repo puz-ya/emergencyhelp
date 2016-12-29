@@ -5,9 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.preference.EditTextPreference;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
 import android.util.Log;
-
 
 /**
  * Created by YD on 06.11.2016.
@@ -39,7 +37,7 @@ public /* static */ class SettingsFragmentUserInfo
             //so, always check the isAdded() method of fragment before getting context by getActivity()
             mSettingsActivity = getActivity();
         }else{
-            Log.d("SettingsFragment","Couldn\'t load SettingsActivity context");
+            Log.d(LOG_TAG, "Couldn\'t load SettingsActivity context");
             return;
         }
 

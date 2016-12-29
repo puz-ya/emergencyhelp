@@ -68,7 +68,6 @@ public class SettingsActivity
                         .setContent(R.id.tab3)
         );
 
-        //переставлено правильно 2016.11.06
         mTabHost.setCurrentTabByTag(activeTabName == null ? "info" : activeTabName);
 
         mService = new MessengerToAccelerometerMonitoringService(getApplicationContext(), null);

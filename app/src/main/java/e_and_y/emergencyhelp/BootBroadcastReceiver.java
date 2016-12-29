@@ -24,6 +24,6 @@ public class BootBroadcastReceiver extends BroadcastReceiver {
         if (bOnBoot) {
             context.startService(new Intent(context, AccelerometerMonitoringService.class));
         }
-        Log.i(LOG_TAG,"Start after reboot_" + bOnBoot);
+        Log.i(LOG_TAG, "Start after reboot_" + bOnBoot);
     }
 }

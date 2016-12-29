@@ -42,6 +42,8 @@ public class AlarmFragment
     private long mWaitingTime;
     private long mStartTime;
 
+    private boolean mIsTestStart = false;
+
     private Context mContext;
     private Activity mActivity;
     private MessengerToAccelerometerMonitoringService mService;
@@ -88,7 +90,6 @@ public class AlarmFragment
         mCurrentMode = MODE_PRE_ALARM;
 
         setRetainInstance(true);
-
     }
 
     @Override
@@ -101,7 +102,7 @@ public class AlarmFragment
             mActivity = getActivity();
             mContext = mActivity.getApplicationContext();
         }else{
-            Log.d("SettingsFragment","Couldn\'t load AlarmActivity context");
+            Log.d(LOG_TAG, "Couldn\'t load AlarmActivity context");
             return;
         }
 
@@ -129,7 +130,6 @@ public class AlarmFragment
         mMediaPlayer.setLooping(true);
         try {
             mMediaPlayer.setDataSource(alarmSound.getFileDescriptor(), alarmSound.getStartOffset(), alarmSound.getLength());
-            //mMediaPlayer.prepare();
             // You will get Error (-38,0) IF you call mediaPlayer.start() before it has reached the prepared state.
             mMediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                 @Override
@@ -168,6 +168,10 @@ public class AlarmFragment
             mLayout = (RelativeLayout) mFragmentView.findViewById(R.id.alarmLayout);
             mTimeLeftView = (TextView) mFragmentView.findViewById(R.id.timeLeft);
             mAlarmDescriptionView = (TextView) mFragmentView.findViewById(R.id.alarmDescription);
+            if(mIsTestStart){
+                //TODO: If we get "test" param from extra intent -> change text or...
+                //mAlarmDescriptionView.setText("Test");
+            }
 
             mStopButton = (Button) mFragmentView.findViewById(R.id.stopButton);
             mStopButton.setOnClickListener(this);
@@ -196,8 +200,6 @@ public class AlarmFragment
             mWaitingTime = 1000 * Integer.parseInt(sAlarmTime);
             mStartTime = System.currentTimeMillis();
 
-            //mMediaPlayer.start(); //must be commented, in onCreate we already assigned setOnPreparedListener
-
             mBackgroundChangeTask = new ChangeBackgroundTask();
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.HONEYCOMB) {
                 mBackgroundChangeTask.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
@@ -218,7 +220,6 @@ public class AlarmFragment
     public void onPause(){
         Log.d(LOG_TAG, "onPause");
 
-        //onDestroy();    //if we switching to background (Home button or smth else like incomming call), we stop
         releaseAlarmObjects();
         super.onPause();
     }
@@ -226,24 +227,25 @@ public class AlarmFragment
     @Override
     public void onDetach() {
         Log.d(LOG_TAG, "onDetach");
-        super.onDetach();
 
         mActivity = null;
+        super.onDetach();
     }
 
     @Override
     public void onDestroy() {
         Log.d(LOG_TAG, "onDestroy");
-        super.onDestroy();
 
         releaseAlarmObjects();
         mService.unbindService();
+        super.onDestroy();
     }
 
 
     @Override
     public void onClick(final View view) {
         Log.d(LOG_TAG, "onClick");
+
         // This method will be also called when the back button pressed
         stopAlarmByUser();
         mActivity.finish();
@@ -252,14 +254,15 @@ public class AlarmFragment
 
     private void stopAlarmByUser() {
         Log.d(LOG_TAG, "stopAlarmByUser");
+
         mCurrentMode = MODE_POST_ALARM;
         releaseAlarmObjects();
-
         mService.sendMessageToService(AccelerometerMonitoringService.MSG_ALARM_CANCELLED);
     }
 
     private void stopAlarmByTimeout() {
         Log.d(LOG_TAG, "stopAlarmByTimeOut");
+
         mCurrentMode = MODE_POST_ALARM;
         releaseAlarmObjects();
 
@@ -299,6 +302,10 @@ public class AlarmFragment
             mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
             mActivity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
         }
+    }
+
+    public void setAlarmDescriptionView(boolean isTest){
+        mIsTestStart = isTest;
     }
 
     private class ChangeBackgroundTask extends AsyncTask<Void, Void, Void> {

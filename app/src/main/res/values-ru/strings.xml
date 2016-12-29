@@ -23,7 +23,7 @@
     <string name="notification_network_off">СЕТЬ ВЫКЛ</string>
     <string name="notification_network_on">СЕТЬ ВКЛ</string>
     <string name="notification_description">Сервис ВКЛ, $GPS</string>
-    <string name="notification_sms_was_sent">Emergency SMSs was sent, monitoring was stopped</string>
+    <string name="notification_sms_was_sent">SMS отправлены, служба остановлена</string>
     <string name="notification_sms_was_sent_numbers">Номера:</string>
 
 
@@ -34,8 +34,9 @@
     <string name="alarm_screen_button_while_alarm">ОТМЕНА ТРЕВОГИ</string>
     <string name="alarm_screen_button_after_alarm">ОК</string>
     <string name="alarm_screen_description">
-        Сервис ВЫКЛ.\n
-        После завершения отсчёта сообщения будут отправлены.
+        После завершения отсчёта, \n
+        SMS будут отправлены указанным номерам. \n
+        Фоновая служба выключена до повторного включения.\n
     </string>
 
 
@@ -56,6 +57,13 @@
     <string name="menu_about">О приложении</string>
     <string name="menu_authors">Авторы</string>
     <string name="menu_close_all">Закрыть</string>
+
+    <!-- LOCATION CHECK -->
+    <string name="location_enable_location_access">Пожалуйста, предоставьте LOCATION ACCESS в Настройках.</string>
+    <string name="location_was_found">Местоположение найдено...</string>
+    <string name="location_was_not_found">Местоположение не найдено...</string>
+    <string name="location_permission_granted">Доступ разрешён, спасибо!</string>
+    <string name="location_permission_not_granted">Доступ запрещён, отмена...</string>
 
     <!-- GPS IS OFF DIALOG -->
     <string name="gps_off_dialog_description">

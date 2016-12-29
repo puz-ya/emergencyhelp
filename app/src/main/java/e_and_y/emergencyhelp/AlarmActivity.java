@@ -3,9 +3,11 @@ package e_and_y.emergencyhelp;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 
 public class AlarmActivity extends Activity /*implements View.OnClickListener */{
     private Fragment mAlarmFragment;
@@ -30,6 +32,13 @@ public class AlarmActivity extends Activity /*implements View.OnClickListener */
                     .beginTransaction()
                     .replace(android.R.id.content, mAlarmFragment, "alarm")
                     .commit();
+        }
+
+        //Checking for test alarm
+        Intent intent = getIntent();
+        boolean bIsTest = intent.getBooleanExtra("IsTestClick", false);
+        if(bIsTest){
+            ((AlarmFragment) mAlarmFragment).setAlarmDescriptionView(true);
         }
     }
 

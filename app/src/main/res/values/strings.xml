@@ -24,7 +24,7 @@
     <string name="notification_network_on">NETWORK ON</string>
     <string name="notification_network_off">NETWORK OFF</string>
     <string name="notification_description">Service ON, $GPS</string>
-    <string name="notification_sms_was_sent">Emergency SMSs was sent, monitoring was stopped</string>
+    <string name="notification_sms_was_sent">SMS were sent, service stopped</string>
     <string name="notification_sms_was_sent_numbers">Numbers: </string>
 
 
@@ -35,8 +35,9 @@
     <string name="alarm_screen_button_while_alarm">STOP ALARM</string>
     <string name="alarm_screen_button_after_alarm">OK</string>
     <string name="alarm_screen_description">
-        Monitoring is OFF now.\n
-        After countdown message(s) will be send.
+        After countdown, \n
+        SMS will be send to the selected phone numbers.\n
+        Background service is OFF until set on again.\n
     </string>
 
 
@@ -59,6 +60,13 @@
     <string name="menu_about">About</string>
     <string name="menu_authors">Authors</string>
     <string name="menu_close_all">Close</string>
+
+    <!-- LOCATION CHECK -->
+    <string name="location_enable_location_access">Please, enable LOCATION ACCESS in Settings.</string>
+    <string name="location_was_found">Location was found...</string>
+    <string name="location_was_not_found">Location not found yet...</string>
+    <string name="location_permission_granted">Permission was granted, thank you!</string>
+    <string name="location_permission_not_granted">Permission was not granted, aborting...</string>
 
     <!-- GPS IS OFF DIALOG -->
     <string name="gps_off_dialog_description">

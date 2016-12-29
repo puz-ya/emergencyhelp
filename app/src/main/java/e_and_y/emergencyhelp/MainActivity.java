@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     private void setAccelServiceOn() {
         Log.d(LOG_TAG, "setAccelServiceOn");
 
+        //Check user name
         if(mSharedPreferences.getString("user_name", "").isEmpty()){
             new AlertDialog.Builder(this)
                     .setMessage(getString(R.string.first_launch_open_settings_dialog_description))
@@ -146,6 +147,7 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
             return;
         }
 
+        //Check contact list
         if (mSharedPreferences.getStringSet("emergency_contacts", new TreeSet<String>()).isEmpty()) {
 
             Log.d(LOG_TAG, "emergencyContactsAreEmpty");
@@ -184,18 +186,10 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
 
             Log.d(LOG_TAG, "emergencyContactsNOTEmpty");
 
-            Intent intent = new Intent(this, AccelerometerMonitoringService.class);
-            ComponentName componentName = startService(intent); //componentName just for debug
-
-            Log.d(LOG_TAG, "startService");
-
-
             //checking GPS permissions (API 21+) FINE_LOCATION is enough for both NETWORK & GPS
             if (ActivityCompat.checkSelfPermission(MainActivity.this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                // Consider calling ActivityCompat#requestPermissions
-                // here to request the missing permissions, and then overriding
-                //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                //                                          int[] grantResults)
+                // Consider calling ActivityCompat#requestPermissions and then overriding
+                // public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults)
                 // to handle the case where the user grants the permission.
                 ActivityCompat.requestPermissions(
                         MainActivity.this,
@@ -203,35 +197,39 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                         INITIAL_REQUEST_4LOCATION
                 );
 
-                Toast.makeText(this, "Please, enable LOCATION ACCESS in settings.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, getString(R.string.location_enable_location_access), Toast.LENGTH_SHORT).show();
             }else{
 
+                // if PROVIDER is DISABLED, we don't start service, we show warning
+                if(showDialogCheckLocationManager()){
+                    MyLocation.LocationResult locationResult = new MyLocation.LocationResult(){
+                        @Override
+                        public void gotLocation(Location location){
+                            //Got the location!
+                            mLocation = location;
+                        }
+                    };
+                    MyLocation myLocation = new MyLocation();
+                    boolean bRes = myLocation.getLocation(this, locationResult);
 
-                MyLocation.LocationResult locationResult = new MyLocation.LocationResult(){
-                    @Override
-                    public void gotLocation(Location location){
-                        //Got the location!
-                        mLocation = location;
+                    if(mLocation != null){
+                        Toast.makeText(MainActivity.this, getString(R.string.location_was_found), Toast.LENGTH_LONG).show();
+                    }else{
+                        Toast.makeText(MainActivity.this, getString(R.string.location_was_not_found), Toast.LENGTH_LONG).show();
                     }
-                };
-                MyLocation myLocation = new MyLocation();
-                boolean bRes = myLocation.getLocation(this, locationResult);
 
-                if(mLocation != null){
-                    Toast.makeText(MainActivity.this, "Location was found...", Toast.LENGTH_LONG).show();
-                }else{
-                    Toast.makeText(MainActivity.this, "Location not found yet...", Toast.LENGTH_LONG).show();
+                    //After all checks we can start service
+                    Log.d(LOG_TAG, "startService");
+                    Intent intent = new Intent(this, AccelerometerMonitoringService.class);
+                    ComponentName componentName = startService(intent); //componentName just for debug
                 }
-
-                showDialogCheckLocationManager();
             }
 
         }
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           String permissions[], int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         switch (requestCode) {
             case INITIAL_REQUEST_4LOCATION: {
                 // If request is cancelled, the result arrays are empty.
@@ -239,13 +237,13 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                         && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
 
                     // permission was granted, yay! Do the task you need to do.
-                    Toast.makeText(this, "Permission was granted, thank you!.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.location_permission_granted), Toast.LENGTH_SHORT).show();
                     showDialogCheckLocationManager();
 
                 } else {
 
                     // permission denied! Disable the functionality that depends on this.
-                    Toast.makeText(this, "Permission was not granted, aborting...", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.location_permission_not_granted), Toast.LENGTH_SHORT).show();
                     finish();
                 }
                 //return;
@@ -257,8 +255,11 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
     }
 
     public void onClickStartAlarm(View view){
+        Log.d(LOG_TAG, "onClickStartAlarm");
+
         final Intent intent = new Intent(this, AlarmActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        intent.putExtra("IsTestClick", true);   //for some text changes
         startActivity(intent);
     }
 
@@ -545,36 +546,43 @@ public class MainActivity extends AppCompatActivity implements CompoundButton.On
                 .show();
     }
 
-    private void showDialogCheckLocationManager(){
+    private boolean showDialogCheckLocationManager(){
 
         final LocationManager locationManager =
                 (LocationManager) this.getSystemService(LOCATION_SERVICE);
 
-        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            new AlertDialog.Builder(this)
-                    .setMessage(getString(R.string.gps_off_dialog_description))
-                    .setPositiveButton(
-                            getString(R.string.gps_off_dialog_positive_button),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
-                                    dialogInterface.dismiss();
+        //checking ALL providers
+        if(!locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
+            if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+                new AlertDialog.Builder(this)
+                        .setMessage(getString(R.string.gps_off_dialog_description))
+                        .setPositiveButton(
+                                getString(R.string.gps_off_dialog_positive_button),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                                        dialogInterface.dismiss();
+                                    }
                                 }
-                            }
-                    )
-                    .setNegativeButton(
-                            getString(R.string.gps_off_dialog_negative_button),
-                            new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-                                    dialogInterface.cancel();
+                        )
+                        .setNegativeButton(
+                                getString(R.string.gps_off_dialog_negative_button),
+                                new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                        mStatusSwitch.setChecked(false); //service mustn't run before this
+                                        dialogInterface.cancel(); //will call DialogInterface.OnCancelListener
+                                    }
                                 }
-                            }
-                    )
-                    .create()
-                    .show();
+                        )
+                        .create()
+                        .show();
+                return false;
+            }
         }
+
+        return true;
     }
 
     public static void showExitDialog(final Activity activity, final String message, final String exitButtonText) {

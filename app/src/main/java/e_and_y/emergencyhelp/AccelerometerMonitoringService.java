@@ -157,11 +157,9 @@ public class AccelerometerMonitoringService
     }
 
     public int onStartCommand(Intent intent, int flags, int startId){
-        //ENABLE DEBUG in SERVICE FUUUUUUUUUCK
-        //android.os.Debug.waitForDebugger();  // this line is key
         Log.d(LOG_TAG, "onStartCommand");
-        //Toast.makeText(this, "Service Started", Toast.LENGTH_LONG).show();
 
+        //android.os.Debug.waitForDebugger();  // this line is key
         readUserPreferences();
 
         Log.d(LOG_TAG, "onStartCommand_applyNormalMode");
@@ -184,15 +182,15 @@ public class AccelerometerMonitoringService
     @Override
     public IBinder onBind(final Intent intent) {
         Log.d(LOG_TAG, "onBind");
+
         return mMessenger.getBinder();
-        //return null;
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
+        Log.d(LOG_TAG, "onUnbind");
         // All clients have unbound with unbindService()
         //Toast.makeText(this, "onUnbind", Toast.LENGTH_LONG).show();
-        Log.d(LOG_TAG, "onUnbind");
         return false;    // true -> indicates whether onRebind should be used
     }
     @Override
@@ -206,9 +204,9 @@ public class AccelerometerMonitoringService
     //When we remove app from application list, onTaskRemoved calls for service
     @Override
     public void onTaskRemoved(Intent rootIntent){
-        //Toast.makeText(getApplicationContext(), "<< onTaskRemoved called >>", Toast.LENGTH_LONG).show();
         Log.d(LOG_TAG, "onTaskRemoved");
 
+        //Toast.makeText(getApplicationContext(), "<< onTaskRemoved called >>", Toast.LENGTH_LONG).show();
         // start blank activity to prevent kill
         // @see https://code.google.com/p/android/issues/detail?id=53313
         Intent intent = new Intent(this, MainActivity.class);
@@ -249,11 +247,9 @@ public class AccelerometerMonitoringService
 
 
     private void applyNormalMode() {
-        //ENABLE DEBUG in SERVICE FUUUUUUUUUCK
-        //android.os.Debug.waitForDebugger();  // this line is key
-
         Log.d(LOG_TAG, "applyNormalMode");
 
+        //android.os.Debug.waitForDebugger();  // this line is key
         mSensorManager.unregisterListener(mAccelerometerListener, mSensor);
         final boolean batchMode =
                 mSensorManager.registerListener(mAccelerometerListener, mSensor, SensorManager.SENSOR_DELAY_NORMAL);
@@ -484,7 +480,7 @@ public class AccelerometerMonitoringService
             //TODO: onAccuracyChanged() empty
         }
 
-        //TODO: never used concatValues()
+        //used in previous tests
         private String concatValues(final float[] values) {
             return values[0] + " "  + values[1] + " " + values[2];
         }
@@ -549,12 +545,14 @@ public class AccelerometerMonitoringService
         @Override
         public void onProviderDisabled(final String provider) {
             Log.d(LOG_TAG, "GPS OFF");
+
             setServiceIsRunningNotification();
         }
 
         @Override
         public void onProviderEnabled(final String provider) {
             Log.d(LOG_TAG, "GPS ON");
+
             setServiceIsRunningNotification();
         }
 
@@ -569,7 +567,6 @@ public class AccelerometerMonitoringService
         }
 
         private boolean isThisLocationBetter(final Location newLocation) {
-
             Log.d(LOG_TAG, "isLocationBetter");
 
             //first checking current\old location
@@ -622,6 +619,7 @@ public class AccelerometerMonitoringService
         /** Checks whether two providers are the same */
         private boolean isSameProvider(final String provider1, final String provider2) {
             Log.d(LOG_TAG, "isSameProvider");
+
             if (provider1 == null) {
                 return provider2 == null;
             }
@@ -632,6 +630,7 @@ public class AccelerometerMonitoringService
 
     public static boolean isServiceRunning(Context context) {
         Log.d(LOG_TAG, "isServiceRunning");
+
         final Class<?> serviceClass = AccelerometerMonitoringService.class;
 
         final ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);

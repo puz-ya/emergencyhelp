@@ -205,27 +205,12 @@ public class SettingsFragmentPhones
                     mEmergencyContactsAdapter.notifyDataSetChanged();
                 }else {
                     showOKButtonDialog(R.string.settings_number_count);
-                    /*MainActivity.showOneButtonDialog(
-                            getActivity(),
-                            getString(R.string.settings_number_count),
-                            getString(R.string.dialog_one_button_positive_button));
-                    */
                 }
             } else {
                 showOKButtonDialog(R.string.settings_repeating_number);
-                /*MainActivity.showOneButtonDialog(
-                        getActivity(),
-                        getString(R.string.settings_repeating_number),
-                        getString(R.string.dialog_one_button_positive_button));
-                */
             }
         } else {
             showOKButtonDialog(R.string.settings_invalid_number);
-            /*MainActivity.showOneButtonDialog(
-                    getActivity(),
-                    getString(R.string.settings_invalid_number),
-                    getString(R.string.dialog_one_button_positive_button));
-                    */
         }
     }
 
